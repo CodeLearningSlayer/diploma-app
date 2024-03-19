@@ -1,0 +1,114 @@
+:root {
+  /* colors */
+  --color-white: #fff;
+  --color-grey: #666666;
+  --color-accent-blue: #00acff;
+  --color-black: #000;
+  --color-grey-light: #e5e5e5;
+  /* sizes */
+  --size-4: 0.25rem;
+  --size-8: 0.5rem;
+  --size-10: 0.625rem;
+  --size-12: 0.75rem;
+  --size-14: 0.875rem;
+  --size-16: 1rem;
+  --size-20: 1.25rem;
+  --size-24: 1.5rem;
+  --size-28: 1.75rem;
+  --size-32: 2rem;
+  --size-36: 2.25rem;
+  --size-38: 2.375rem;
+  --size-40: 2.5rem;
+  --size-44: 2.75rem;
+  --size-48: 3rem;
+  --size-50: 3.675rem;
+  --size-56: 3.5rem;
+  --size-60: 3.75rem;
+  --size-64: 4rem;
+  --size-76: 4.75rem;
+  --size-96: 6rem;
+  --size-112: 7rem;
+  --size-192: 12rem;
+  --size-320: 20rem;
+  --size-368: 23rem;
+  --size-480: 30rem;
+  --size-560: 35rem;
+  --size-720: 45rem;
+
+  /* base */
+  --color-background: #0a0a0a;
+  --color-text: #ffffff;
+
+  --color-text-op-5: rgba(0, 0, 0, 0.5);
+  --color-text-op-2: rgba(0, 0, 0, 0.2);
+  --color-text-op-1: rgba(0, 0, 0, 0.1);
+  --color-text-op-05: rgba(0, 0, 0, 0.05);
+  --color-text-op-04: rgba(0, 0, 0, 0.04);
+
+  /* errors */
+  --color-error: #fd2a2a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background: var(--color-grey-light);
+  color: var(--color-text);
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+  font-weight: normal;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  padding: 0;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul[class] {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
