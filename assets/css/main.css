@@ -1,0 +1,9 @@
+@import "./base.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.v-list-item__prepend {
+  display: block !important;
+}

@@ -1,5 +1,5 @@
 import { $fetch } from "ofetch";
-import UserApi from "~/api/modules/user";
+import UserService from "~/api/modules/user";
 
 export const useAPI = () => {
   const $fetcherOptions = {};
@@ -7,6 +7,6 @@ export const useAPI = () => {
   const $fetcher = $fetch.create($fetcherOptions);
 
   return {
-    userService: new UserApi($fetcher),
+    userService: new UserService($fetcher),
   };
 };

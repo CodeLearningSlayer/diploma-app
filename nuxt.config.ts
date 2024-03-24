@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vuetify"],
   },
-  css: ["~/assets/css/base.css"],
+  css: ["~/assets/css/main.css"],
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", config => {
@@ -21,7 +21,7 @@ export default defineNuxtConfig({
       "@nuxtjs/google-fonts",
       {
         families: {
-          Montserrat: [400, 600, 700],
+          Montserrat: [400, 500, 600, 700],
         },
         display: "swap",
       },

@@ -9,3 +9,9 @@
 </template>
 
 <script></script>
+
+<style>
+  .v-application {
+    @apply bg-[--color-grey-light] !important;
+  }
+</style>

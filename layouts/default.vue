@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <MainHeader />
+    <MainHeader class="mb-[38px]" />
     <slot />
   </div>
 </template>

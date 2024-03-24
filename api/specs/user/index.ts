@@ -13,3 +13,7 @@ export interface IUser {
     phone?: string;
   };
 }
+
+export interface GetUserBySlugResponse {
+  user: IUser;
+}
