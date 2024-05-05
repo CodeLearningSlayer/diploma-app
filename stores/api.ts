@@ -1,7 +1,7 @@
 import { $fetch } from "ofetch";
 import UserService from "~/api/modules/user";
 
-export const useAPI = () => {
+export const useApiStore = defineStore("useApiStore", () => {
   const $fetcherOptions = {};
 
   const $fetcher = $fetch.create($fetcherOptions);
@@ -9,4 +9,4 @@ export const useAPI = () => {
   return {
     userService: new UserService($fetcher),
   };
-};
+});

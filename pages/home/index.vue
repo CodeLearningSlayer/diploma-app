@@ -3,7 +3,9 @@
   import UserPageNav from "~/components/user-page/UserPageNav.vue";
   import UserPageFollowedCard from "~/components/user-page/UserPageFollowedCard.vue";
   import UserPageCreatePostWidget from "~/components/user-page/UserPageCreatePostWidget.vue";
-  const { userService } = useAPI();
+  import { useApiStore } from "~/stores/api";
+
+  const { userService } = useApiStore();
 
   const { myAccount } = storeToRefs(useUserStore());
 

@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     "@nuxtjs/eslint-module",
+    "dayjs-nuxt",
     [
       "@nuxtjs/google-fonts",
       {
@@ -27,10 +28,22 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  imports: {
+    dirs: ["stores"],
+  },
+  pinia: {
+    storesDirs: ["./stores/**"],
+  },
   postcss: {
     plugins: {
       "postcss-nested": {},
     },
+  },
+  dayjs: {
+    locales: ["en", "fr"],
+    plugins: ["relativeTime", "utc", "timezone"],
+    defaultLocale: "en",
+    defaultTimezone: "America/New_York",
   },
   vite: {
     vue: {
