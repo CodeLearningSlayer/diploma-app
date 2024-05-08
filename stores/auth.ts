@@ -1,5 +1,5 @@
-export const useAuth = defineStore("useAuthStore", () => {
-  const isAuth = ref();
+export const useAuthStore = defineStore("useAuthStore", () => {
+  const isAuth = ref(true);
 
   return {
     isAuth,
