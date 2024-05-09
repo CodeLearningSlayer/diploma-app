@@ -2,7 +2,7 @@
   import { useField, useForm } from "vee-validate";
   import GoogleIcon from "../icons/GoogleIcon.vue";
   import HeaderLogo from "~/components/icons/HeaderLogo.vue";
-  import type { AuthType } from "~/types/auth";
+  import { AuthType } from "~/types/auth";
 
   useForm({
     validationSchema: {
@@ -53,7 +53,13 @@
             hint="Min. 8 symbols with numbers"
             type="password"
           />
-          <v-btn v-if="variant === 'login'" elevation="1" class="auth-btn" type="submit">
+          <v-btn
+            v-if="variant === AuthType.Login"
+            color="var(--color-accent-blue)"
+            elevation="1"
+            class="auth-btn"
+            type="submit"
+          >
             Sign in
           </v-btn>
           <v-btn
@@ -65,6 +71,14 @@
           >
             Sign up
           </v-btn>
+          <div v-if="variant === AuthType.Registration" class="sign-change">
+            Already have an account?
+            <NuxtLink class="sign-change-link" to="/auth">Sign in</NuxtLink>
+          </div>
+          <div v-else class="sign-change">
+            Don't have account?
+            <NuxtLink class="sign-change-link" to="/auth/registration">Sign up</NuxtLink>
+          </div>
         </div>
         <div class="flex items-center gap-[8px] my-[16px]">
           <v-divider class="border-opacity-100" :thickness="1" /> or
@@ -98,5 +112,11 @@
   }
   .google-auth-btn {
     @apply text-[14px];
+  }
+  .sign-change {
+    @apply mt-[10px] mx-auto;
+  }
+  .sign-change-link {
+    @apply font-[500] text-[--color-accent-blue];
   }
 </style>

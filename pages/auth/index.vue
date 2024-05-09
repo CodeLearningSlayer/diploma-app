@@ -2,32 +2,29 @@
   import AuthLoginForm from "~/components/auth/AuthLoginForm.vue";
   import { AuthType } from "~/types/auth";
 
-  const authFormType = ref<AuthType>(AuthType.Registration);
+  const { authService } = useApiStore();
+  const { accessToken } = storeToRefs(useCookieStore());
+  const { refreshToken } = storeToRefs(useLocalStore());
 
-  const handleRegistration = (email: string, password: string) => {
-    console.log(email, password);
-  };
-
-  const handleLogin = (email: string, password: string) => {
-    console.log(email, password);
-  };
-
-  const handleFormCallback = computed(() => {
-    if (authFormType.value === AuthType.Login) {
-      return handleLogin;
-    } else {
-      return handleRegistration;
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const res = await authService.Login({ email, password });
+      accessToken.value = res.accessToken;
+      refreshToken.value = res.refreshToken;
+      await navigateTo("/home");
+    } catch (e) {
+      console.log(e);
     }
-  });
+  };
 </script>
 
 <template>
   <div class="auth-wrapper">
-    <AuthLoginForm :variant="authFormType" :callback="handleFormCallback" />
+    <AuthLoginForm :variant="AuthType.Login" :callback="handleLogin" />
   </div>
 </template>
 
-<style scoped>
+<style>
   .auth-wrapper {
     height: 100%;
     background-image: url("../../assets/image/auth-bg.svg");

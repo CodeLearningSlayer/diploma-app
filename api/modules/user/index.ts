@@ -11,6 +11,10 @@ export default class UserService extends HttpFactory {
     return await this.get<GetUserBySlugResponse>("/api/user/getInfo");
   }
 
+  public async GetMyProfile(): Promise<GetUserBySlugResponse> {
+    return await this.get<GetUserBySlugResponse>("/api/user/me");
+  }
+
   public async CreatePost(postData: CreatePostRequest): Promise<CreatePostResponse> {
     const postFormData = new FormData();
 

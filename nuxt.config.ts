@@ -6,6 +6,11 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vuetify"],
   },
+  runtimeConfig: {
+    public: {
+      baseApiUrl: "",
+    },
+  },
   css: ["~/assets/css/main.css"],
   modules: [
     (_options, nuxt) => {
