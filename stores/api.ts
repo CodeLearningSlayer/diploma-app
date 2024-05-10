@@ -27,7 +27,7 @@ export const useApiStore = defineStore("useApiStore", () => {
         Authorization: "Bearer " + token,
       },
       body: {
-        refresh: refreshToken,
+        refresh: refreshToken.value,
       },
     });
 

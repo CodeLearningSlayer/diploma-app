@@ -11,10 +11,12 @@ export const useCookieStore = defineStore("useCookieStore", () => {
   }
 
   const accessToken = useCookie(CookieNames.AccessToken, options);
-  const accessExpirationDate = useCookie(CookieNames.AccessTokenExpirationDate);
+  const accessExpirationDate = useCookie(CookieNames.AccessTokenExpirationDate, options);
 
   watch(accessToken, (token: string) => {
-    accessExpirationDate.value = getTokenExpirationTime(token).toString();
+    if (token) {
+      accessExpirationDate.value = getTokenExpirationTime(token).toString();
+    }
   });
 
   return {

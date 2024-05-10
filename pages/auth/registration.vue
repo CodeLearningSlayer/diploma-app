@@ -10,6 +10,7 @@
       const res = await authService.Register({ email, password });
       accessToken.value = res.accessToken;
       refreshToken.value = res.refreshToken;
+      await navigateTo("/auth/start");
     } catch (e) {
       console.log(e);
     }

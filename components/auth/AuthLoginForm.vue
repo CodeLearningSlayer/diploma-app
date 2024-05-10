@@ -7,7 +7,7 @@
   useForm({
     validationSchema: {
       email(value: string) {
-        if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true;
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return true;
 
         return "Must be a valid e-mail.";
       },

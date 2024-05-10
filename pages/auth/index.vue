@@ -19,19 +19,9 @@
 </script>
 
 <template>
-  <div class="auth-wrapper">
+  <NuxtLayout name="auth">
     <AuthLoginForm :variant="AuthType.Login" :callback="handleLogin" />
-  </div>
+  </NuxtLayout>
 </template>
 
-<style>
-  .auth-wrapper {
-    height: 100%;
-    background-image: url("../../assets/image/auth-bg.svg");
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
+<style></style>

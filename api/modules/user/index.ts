@@ -8,7 +8,7 @@ import {
 
 export default class UserService extends HttpFactory {
   public async GetUserBySlug(_slug: string): Promise<GetUserBySlugResponse> {
-    return await this.get<GetUserBySlugResponse>("/api/user/getInfo");
+    return await this.get<GetUserBySlugResponse>("/user/getInfo");
   }
 
   public async GetMyProfile(): Promise<GetUserBySlugResponse> {
