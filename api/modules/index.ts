@@ -27,14 +27,14 @@ export default class HttpFactory {
   }
 
   protected async put<T>(url: string, body?: any, options?: FetchOptions) {
-    return await this.call<T>("GET", url, body, options);
+    return await this.call<T>("PUT", url, body, options);
   }
 
   protected async patch<T>(url: string, options?: FetchOptions) {
-    return await this.call<T>("GET", url, undefined, options);
+    return await this.call<T>("PATCH", url, undefined, options);
   }
 
   protected async delete<T>(url: string, options?: FetchOptions) {
-    return await this.call<T>("GET", url, undefined, options);
+    return await this.call<T>("DELETE", url, undefined, options);
   }
 }

@@ -7,11 +7,7 @@
   <div class="tags-card px-[24px] py-[20px] bg-[--color-white] rounded-[18px]">
     <div class="tags-card-top font-[600] flex uppercase justify-between items-center">
       Followed Hashtags
-      <v-icon
-        :icon="mdiPlusBoxOutline"
-        class="text-[--color-grey] cursor-pointer"
-        onclick="console.log('hi')"
-      />
+      <v-icon :icon="mdiPlusBoxOutline" class="text-[--color-grey] cursor-pointer" />
     </div>
     <v-divider class="border-opacity-100 mb-[5px]" />
     <div class="tags">

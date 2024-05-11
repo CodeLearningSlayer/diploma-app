@@ -17,3 +17,14 @@ export interface IUser {
 export interface GetUserBySlugResponse {
   user: IUser;
 }
+
+interface IPost {
+  text: string;
+  img: Array<File> | null;
+  video: Array<File> | null;
+  event: Date | null;
+}
+
+export interface CreatePostRequest extends IPost {}
+
+export interface CreatePostResponse {}
