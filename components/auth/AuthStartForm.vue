@@ -3,15 +3,21 @@
   import { professionList } from "~/consts/auth";
   import PictureInput from "~/components/common/PictureInput.vue";
 
+  defineProps<{
+    submit: () => void;
+  }>();
+
+  const { profileService } = useApiStore();
+
   useForm({
     validationSchema: {
       name(value: string) {
-        if (value.length >= 3) return true;
+        if (value && value.length >= 3) return true;
 
         return "Name length must be more than 3 characters";
       },
       surname(value: string) {
-        if (value.length >= 3) return true;
+        if (value && value.length >= 3) return true;
 
         return "Surname length must be more than 3 characters";
       },
@@ -21,14 +27,36 @@
   const name = useField<string>("name");
   const surname = useField<string>("surname");
   const profession = ref();
+  const avatar = ref<string>();
+
+  const handleSubmitPhoto = (photo: string) => {
+    avatar.value = photo;
+  };
+
+  const handleSubmitForm = async () => {
+    try {
+      const data = {
+        name: name.value.value,
+        surname: surname.value.value,
+        profession: profession.value,
+        avatar: avatar.value!,
+      };
+
+      await profileService.Start(data);
+
+      await navigateTo("/home");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 </script>
 
 <template>
   <v-card class="auth-start-wrapper" elevation="0" rounded="xl">
     <div class="font-[600] text-center text-[20px] mb-[16px]">Let's get acquainted</div>
-    <form class="auth-start-form" @submit.prevent>
+    <form class="auth-start-form" @submit.prevent="submit">
       <div class="auth-form__inner">
-        <PictureInput />
+        <PictureInput @submit-photo="handleSubmitPhoto" />
         <div class="auth-form-fields">
           <v-text-field
             v-model="name.value.value"
@@ -45,8 +73,6 @@
             :error-messages="surname.errorMessage.value"
             label="Surname"
             density="comfortable"
-            hint="Min. 8 symbols with numbers"
-            type="password"
           />
           <v-select v-model="profession" label="Profession" :items="professionList" />
         </div>
@@ -56,6 +82,7 @@
           elevation="1"
           class="auth-form-btn"
           type="submit"
+          @click="handleSubmitForm"
         >
           Submit
         </v-btn>

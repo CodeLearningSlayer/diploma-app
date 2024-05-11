@@ -1,5 +1,7 @@
 import { $fetch, type FetchOptions } from "ofetch";
 import { AuthService } from "~/api/modules/auth";
+import { FileService } from "~/api/modules/files";
+import { ProfileService } from "~/api/modules/profile";
 import UserService from "~/api/modules/user";
 
 export const useApiStore = defineStore("useApiStore", () => {
@@ -8,8 +10,11 @@ export const useApiStore = defineStore("useApiStore", () => {
   } = useRuntimeConfig();
 
   const { isAuth } = storeToRefs(useAuthStore());
-  const { refreshToken } = storeToRefs(useLocalStore());
-  const { accessToken, accessExpirationDate: expirationDate } = storeToRefs(useCookieStore());
+  const {
+    accessToken,
+    accessExpirationDate: expirationDate,
+    refreshToken,
+  } = storeToRefs(useCookieStore());
 
   let isRefreshing = false;
 
@@ -92,5 +97,7 @@ export const useApiStore = defineStore("useApiStore", () => {
   return {
     userService: new UserService($fetcher),
     authService: new AuthService($fetcher),
+    filesService: new FileService($fetcher),
+    profileService: new ProfileService($fetcher),
   };
 });

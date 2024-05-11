@@ -2,9 +2,12 @@
   import AuthLoginForm from "~/components/auth/AuthLoginForm.vue";
   import { AuthType } from "~/types/auth";
 
+  definePageMeta({
+    layout: false,
+  });
+
   const { authService } = useApiStore();
-  const { accessToken } = storeToRefs(useCookieStore());
-  const { refreshToken } = storeToRefs(useLocalStore());
+  const { accessToken, refreshToken } = storeToRefs(useCookieStore());
 
   const handleLogin = async (email: string, password: string) => {
     try {

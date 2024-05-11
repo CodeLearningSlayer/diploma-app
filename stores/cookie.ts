@@ -7,11 +7,14 @@ export const useCookieStore = defineStore("useCookieStore", () => {
 
   const enum CookieNames {
     AccessToken = "__work_link__access_token",
+    RefreshToken = "__work_link__refresh_token",
     AccessTokenExpirationDate = "__work_link__access_token_expiration_date__",
   }
 
   const accessToken = useCookie(CookieNames.AccessToken, options);
   const accessExpirationDate = useCookie(CookieNames.AccessTokenExpirationDate, options);
+
+  const refreshToken = useCookie(CookieNames.RefreshToken, options);
 
   watch(accessToken, (token: string) => {
     if (token) {
@@ -21,6 +24,7 @@ export const useCookieStore = defineStore("useCookieStore", () => {
 
   return {
     accessToken,
+    refreshToken,
     accessExpirationDate,
   };
 });
