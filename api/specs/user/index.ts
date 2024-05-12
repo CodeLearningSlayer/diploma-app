@@ -14,9 +14,15 @@ export interface IUser {
   };
 }
 
+export interface GetUserBySlugRequest {
+  slug: string;
+}
+
 export interface GetUserBySlugResponse {
   user: IUser;
 }
+
+export interface GetMyProfileResponse extends GetUserBySlugResponse {}
 
 interface IPost {
   text: string;

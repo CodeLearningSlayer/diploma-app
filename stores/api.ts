@@ -1,6 +1,7 @@
 import { $fetch, type FetchOptions } from "ofetch";
 import { AuthService } from "~/api/modules/auth";
 import { FileService } from "~/api/modules/files";
+import { PostsService } from "~/api/modules/posts";
 import { ProfileService } from "~/api/modules/profile";
 import UserService from "~/api/modules/user";
 
@@ -99,5 +100,6 @@ export const useApiStore = defineStore("useApiStore", () => {
     authService: new AuthService($fetcher),
     filesService: new FileService($fetcher),
     profileService: new ProfileService($fetcher),
+    postsService: new PostsService($fetcher),
   };
 });

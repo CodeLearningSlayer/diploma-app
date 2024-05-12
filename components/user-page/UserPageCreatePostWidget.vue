@@ -21,14 +21,20 @@
     user: IUser;
   }>();
 
-  const { userService } = useApiStore();
+  const { postsService } = useApiStore();
 
   // eslint-disable-next-line import/no-named-as-default-member
   dayjs.extend(LocalizedFormat);
 
   const { postContent, eventDate, handleInput, handleRemoveEvent } = usePostContent();
-  const { attachedFiles, isModalOpen, modalType, handleFileAttach, handleFileAttachModalOpen } =
-    useAttachFiles();
+  const {
+    attachedFiles,
+    attachedPreviews,
+    isModalOpen,
+    modalType,
+    handleFileAttach,
+    handleFileAttachModalOpen,
+  } = useAttachFiles();
 
   // собрать всю инфу в FormData и отправить на сервер
   const handleCreatePost = async () => {
@@ -40,7 +46,14 @@
 
     if (eventDate.value) postContent.value.event = eventDate.value;
 
-    const res = await userService.CreatePost(postContent.value);
+    const res = await postsService.CreatePost(postContent.value);
+    resetPostContent();
+  };
+
+  const resetPostContent = () => {
+    postContent.value = null;
+    attachedFiles.value = null;
+    attachedPreviews.value = null;
   };
 
   function usePostContent() {
@@ -105,8 +118,8 @@
   <div class="create-post-widget bg-[--color-white] rounded-[--round-radius]">
     <div class="create-post-widget-inner pt-[16px] px-[25px]">
       <div class="create-post-widget-inner-top flex gap-[16px]">
-        <v-avatar v-if="user && user.avatar" alt="user-avatar" :image="user.avatar?.src" />
-        <v-avatar v-else size="35" class="rounded-lg" color="grey-lighten-2">
+        <v-avatar v-if="user && user.avatar" alt="user-avatar" rounded="lg" :image="user.avatar" />
+        <v-avatar v-else size="35" rounded="lg" color="grey-lighten-2">
           <v-icon :icon="mdiAccountCircleOutline" color="grey-darken-2" />
         </v-avatar>
         <div class="post-field min-h-[70px] w-full" contenteditable @input="handleInput">

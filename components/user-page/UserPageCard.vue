@@ -2,12 +2,15 @@
   import { mdiEmailOutline, mdiPhone, mdiPlusBoxOutline, mdiAccountCircleOutline } from "@mdi/js";
   import { type IUser } from "~/api/specs/user";
 
+  const { isMyProfile } = useAuthStore();
+
   defineProps<{
     user: IUser;
   }>();
 </script>
 
 <template>
+  {{ console.log(user) }}
   <article v-if="user" class="max-w-[340px] bg-white rounded-[18px]">
     <div
       class="user-card-top-block flex justify-end bg-slate-400 rounded-t-[18px] px-[10px] py-[10px]"
@@ -32,7 +35,7 @@
     <div class="user-card-main-block flex px-[12px] py-[5px]">
       <v-avatar
         size="44"
-        :rounded="0"
+        rounded="lg"
         class="mt-[-27px] rounded-lg mr-[7px]"
         color="grey-lighten-2"
       >
@@ -42,13 +45,16 @@
           :icon="mdiAccountCircleOutline"
           color="grey-darken-2"
         />
-        <v-avatar v-else alt="user-avatar" :src="user.avatar?.src" :srcset="user.avatar?.srcset" />
+        <v-avatar v-else rounded="lg" alt="user-avatar" :image="user.avatar" />
       </v-avatar>
       <div class="user-card-main-block__info">
-        <div class="font-[600]">{{ user.name }}</div>
+        <div class="font-[600]">{{ user?.fullName }}</div>
         <div class="text-size-14 text-[--color-grey]">{{ user.profession }}</div>
       </div>
-      <div class="user-card-main-block__completeness flex align-center ml-auto gap-[8px]">
+      <div
+        v-if="isMyProfile(+user.id)"
+        class="user-card-main-block__completeness flex align-center ml-auto gap-[8px]"
+      >
         <div class="w-[70px] h-[7px] bg-[#f6f6f6] rounded-[3px]">
           <span
             class="bg-[--color-accent-blue] my-[2px] mx-[3px] h-[3px] block rounded-[10px]"

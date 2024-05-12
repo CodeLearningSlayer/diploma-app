@@ -22,7 +22,7 @@ export default class UserService extends HttpFactory {
       postFormData.append("video", video);
     });
     postData.img?.forEach(img => {
-      postFormData.append("image", img);
+      postFormData.append("img", img);
     });
 
     postFormData.append("text", postData.text);
