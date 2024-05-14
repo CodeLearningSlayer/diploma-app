@@ -1,6 +1,7 @@
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuth = ref();
   const userId = ref();
+  const profileSlug = ref();
 
   const isMyProfile = (id: number) => {
     console.log(userId.value, id);
@@ -10,6 +11,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   return {
     isAuth,
     userId,
+    profileSlug,
     isMyProfile,
   };
 });

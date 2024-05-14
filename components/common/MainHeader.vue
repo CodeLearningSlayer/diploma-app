@@ -23,6 +23,8 @@
     isAuth: boolean;
   }>();
 
+  const { profileSlug } = storeToRefs(useAuthStore());
+
   const navLinks: Array<{
     icon: {
       active: string;
@@ -35,7 +37,7 @@
         active: mdiHomeVariant,
         default: mdiHomeVariantOutline,
       },
-      link: "/home",
+      link: `${profileSlug.value}`,
     },
     {
       icon: {

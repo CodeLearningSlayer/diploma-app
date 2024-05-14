@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const { isAuth, userId } = storeToRefs(useAuthStore());
+  const { isAuth, userId, profileSlug } = storeToRefs(useAuthStore());
   const { accessToken } = storeToRefs(useCookieStore());
 
   console.log(isAuth, userId.value);
@@ -14,8 +14,8 @@ export default defineNuxtRouteMiddleware(async () => {
 
     if (!error.value) {
       isAuth.value = true;
-      userId.value = data.value.profile.userId;
-      console.log(userId.value, "MIDDLEWARE");
+      userId.value = data.value?.profile.userId;
+      profileSlug.value = data.value?.profile.slug;
       return;
     }
   }

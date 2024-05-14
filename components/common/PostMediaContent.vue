@@ -3,14 +3,13 @@
   import type { IAttachedFile, IVideo } from "~/types/file-upload";
   import ContentModalImage from "~/components/user-page/content-modal/ContentModalImage.vue";
   import ContentModalVideo from "~/components/user-page/content-modal/ContentModalVideo.vue";
-  import { createSingleMediaPreview } from "~/utils/createMediaFilePreview";
 
   const props = defineProps<{
-    attachedFiles: File[];
+    attachedFiles: IAttachedFile[];
   }>();
 
   const emit = defineEmits<{
-    (e: "update:attachedFiles", files: File[]): void;
+    (e: "update:attachedFiles", files: IAttachedFile[]): void;
   }>();
 
   const {
@@ -21,7 +20,6 @@
     handlePinDelete,
     isImageModalOpen,
     isVideoModalOpen,
-    attachedPreviews,
   } = useContentPin();
 
   function useContentPin() {
@@ -32,23 +30,19 @@
       get() {
         return props.attachedFiles;
       },
-      set(newFiles: File[]) {
+      set(newFiles: IAttachedFile[]) {
         emit("update:attachedFiles", newFiles);
       },
     });
 
-    const attachedPreviews = computed(() => {
-      return attachedFiles.value.map(item => createSingleMediaPreview(item));
-    });
-
     const attachedImages = computed(() => {
-      return attachedPreviews.value.filter(item => item.type === "image");
+      return attachedFiles.value.filter(item => item.type === "image");
     });
 
     const currentImage = ref<IAttachedFile>();
     const currentVideo = ref<IAttachedFile>();
 
-    const handlePinDelete = (item: File) => {
+    const handlePinDelete = (item: IAttachedFile) => {
       attachedFiles.value = attachedFiles.value.filter(file => file !== item);
     };
 
@@ -69,7 +63,6 @@
       currentVideo,
       attachedImages,
       attachedFiles,
-      attachedPreviews,
       handlePinDelete,
       handleClickPin,
     };
@@ -80,11 +73,10 @@
   <div class="pins-grid" :class="`pins-grid-${attachedFiles.length}`">
     <!-- сделать обработку клика по пину здесь -->
     <UserPagePostContentPin
-      v-for="(item, index) in attachedPreviews"
+      v-for="(item, index) in attachedFiles"
       :key="item.file.src"
       :class="`pins-grid-child-${index}`"
       :pin="item"
-      :pin-file="attachedFiles[index]"
       @delete-pin="handlePinDelete"
       @open-pin="() => handleClickPin(item)"
     />

@@ -3,15 +3,16 @@
 
   const props = defineProps<{
     pin: IAttachedFile;
-    pinFile: File;
   }>();
 
+  console.log(props.pin);
+
   const emit = defineEmits<{
-    (e: "delete-pin", item: File): void;
+    (e: "delete-pin", item: IAttachedFile): void;
     (e: "open-pin"): void;
   }>();
 
-  const handleCloseClick = (item: File) => {
+  const handleCloseClick = (item: IAttachedFile) => {
     emit("delete-pin", item);
   };
 
@@ -31,7 +32,7 @@
 <template>
   <div class="content-pin" @click="$emit('open-pin')">
     <img class="content-pin-preview" :src="pinPreview" alt="image-thumb" />
-    <div class="close-btn" @click.stop="() => handleCloseClick(pinFile)">
+    <div class="close-btn" @click.stop="() => handleCloseClick(pin)">
       ×
       <v-tooltip location="top" activator="parent">Remove</v-tooltip>
     </div>

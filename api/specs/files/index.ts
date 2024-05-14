@@ -13,3 +13,28 @@ export interface UploadImageResponse {
   message: string;
   data: string;
 }
+
+export interface UploadMultipleImagesRequest {
+  images: File[];
+  temp: boolean;
+}
+
+export interface UploadMultipleVideosRequest {
+  videos: File[];
+  temp: boolean;
+}
+
+export type Videos = Array<{
+  video: string;
+  thumbnail: string;
+}>;
+
+export type Images = string[];
+
+export interface UploadMultipleImagesResponse {
+  images: Images;
+}
+
+export interface UploadMultipleVideosResponse {
+  videos: Videos;
+}

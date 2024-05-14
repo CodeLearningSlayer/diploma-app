@@ -3,7 +3,7 @@
   import UserPageNav from "~/components/user-page/UserPageNav.vue";
   import UserPageFollowedCard from "~/components/user-page/UserPageFollowedCard.vue";
   import UserPageCreatePostWidget from "~/components/user-page/UserPageCreatePostWidget.vue";
-  import UserPagePost from "~/components/user-page/UserPagePost.vue";
+  import UserPagePost from "~/components/user-page/post/UserPagePost.vue";
   import { useApiStore } from "~/stores/api";
 
   const {
@@ -16,10 +16,9 @@
   const { isAuth, isMyProfile } = useAuthStore();
   const { myAccount } = storeToRefs(useUserStore());
   const completness = ref();
+  const posts = ref();
 
-  const { data } = await useAsyncData(() => profileService.GetUserBySlug({ slug }), {
-    server: false,
-  });
+  const { data } = await useAsyncData(() => profileService.GetUserBySlug({ slug }));
 
   const isMyCurrentProfile = computed(() => {
     console.log(data.value?.user.userId);
@@ -35,6 +34,25 @@
     },
     { immediate: true },
   );
+
+  watch(
+    [data],
+    () => {
+      if (data) {
+        posts.value = data.value?.user.posts.slice().reverse();
+      }
+    },
+    { immediate: true },
+  );
+
+  const handleCreatePost = (post: IPost) => {
+    console.log(post);
+    posts.value = [post, ...posts.value];
+  };
+
+  const handleDeletePost = (postId: number) => {
+    posts.value = posts.value.filter(item => item.id !== postId);
+  };
 </script>
 
 <template>
@@ -44,16 +62,38 @@
       <UserPageNav />
       <UserPageFollowedCard />
     </template>
-    <UserPageCreatePostWidget v-if="isMyCurrentProfile" :user="data?.user" />
+    <UserPageCreatePostWidget
+      v-if="isMyCurrentProfile"
+      :user="data?.user"
+      @create-post="handleCreatePost"
+    />
     <div class="posts-wrapper">
-      <!-- <UserPagePost v-for="post in data?.user.posts" :key="post.id" /> -->
+      <UserPagePost
+        v-for="post in posts"
+        :key="post.id"
+        :user="data.user!"
+        :post="post"
+        :is-my-post="isMyCurrentProfile"
+        @delete-post="handleDeletePost"
+      />
     </div>
-    <template #sidebar-right>hi2</template>
+    <template #sidebar-right>
+      <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card>
+      <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card>
+    </template>
   </NuxtLayout>
 </template>
 
 <style scoped>
   .try-link {
     font-weight: bold;
+  }
+
+  .posts-wrapper {
+    @apply flex flex-col gap-[16px];
+  }
+
+  .wip {
+    @apply h-[200px] w-[200px] mb-[12px] flex flex-col justify-center items-center;
   }
 </style>

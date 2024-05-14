@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { mdiPlusBoxOutline } from "@mdi/js";
-  const followedTags = ["work", "bark", "fuck"];
+  const followedTags = ["work", "bark"];
 </script>
 
 <template>

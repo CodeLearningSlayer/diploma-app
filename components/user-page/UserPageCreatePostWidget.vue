@@ -6,63 +6,96 @@
   import UserPageCreatePostWidgetToolsPanel from "~/components/user-page/UserPageCreatePostWidgetToolsPanel.vue";
   import FileAttachInput from "~/components/common/FileAttachInput.vue";
   import PostMediaContent from "~/components/common/PostMediaContent.vue";
-  import { createMediaFilePreview } from "~/utils/createMediaFilePreview";
-  import { type IAttachedFile } from "~/types/file-upload";
+  import { type IAttachedFile, type IVideo } from "~/types/file-upload";
+  import type { Images, Videos } from "~/api/specs/files";
 
   // TODO - вынести в спеки
   interface IPost {
     text: string;
-    img: Array<File> | null;
-    video: Array<File> | null;
-    event: Date | null;
+    img: Array<string> | undefined;
+    video:
+      | Array<{
+          video: string;
+          thumbnail: string;
+        }>
+      | undefined;
+    event: Date | undefined;
   }
 
   defineProps<{
     user: IUser;
   }>();
 
-  const { postsService } = useApiStore();
+  const emit = defineEmits<{
+    (e: "create-post", value: IPost): void;
+  }>();
+
+  const { postsService, filesService } = useApiStore();
+
+  const toast = useToast();
 
   // eslint-disable-next-line import/no-named-as-default-member
   dayjs.extend(LocalizedFormat);
 
-  const { postContent, eventDate, handleInput, handleRemoveEvent } = usePostContent();
-  const {
-    attachedFiles,
-    attachedPreviews,
-    isModalOpen,
-    modalType,
-    handleFileAttach,
-    handleFileAttachModalOpen,
-  } = useAttachFiles();
+  const { postContent, eventDate, handleInput, handleRemoveEvent, DEFAULT_POST_CONTENT } =
+    usePostContent();
+  const { attachedPreviews, isModalOpen, modalType, handleFileAttach, handleFileAttachModalOpen } =
+    useAttachFiles();
+
+  const isPostValid = (postContent: IPost) => {
+    return (
+      postContent.img?.length ||
+      postContent.video?.length ||
+      postContent.text.length ||
+      postContent.event
+    );
+  };
 
   // собрать всю инфу в FormData и отправить на сервер
   const handleCreatePost = async () => {
-    const postVideos = attachedFiles.value.filter(item => item.type.includes("video"));
-    const postImgs = attachedFiles.value.filter(item => item.type.includes("image"));
+    try {
+      const postVideos = attachedPreviews.value?.filter(item => item.type === "video") as Array<
+        IAttachedFile & { file: IVideo }
+      >;
+      const postImgs = attachedPreviews.value?.filter(item => item.type === "image");
 
-    postContent.value.video = postVideos;
-    postContent.value.img = postImgs;
+      if (eventDate.value) postContent.value.event = eventDate.value;
 
-    if (eventDate.value) postContent.value.event = eventDate.value;
+      const postContentReqBody = {
+        text: postContent.value.text.trim(),
+        event: postContent.value.event,
+        img: postImgs?.map(item => item.file.src),
+        video: postVideos?.map(item => ({ thumbnail: item.file.thumbnail, video: item.file.src })),
+      };
 
-    const res = await postsService.CreatePost(postContent.value);
-    resetPostContent();
+      if (!isPostValid(postContentReqBody)) {
+        throw new Error("Post is not valid, fill empty fields");
+      }
+
+      const res = await postsService.CreatePost(postContentReqBody);
+      emit("create-post", res);
+      resetPostContent();
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      }
+    }
   };
 
   const resetPostContent = () => {
-    postContent.value = null;
-    attachedFiles.value = null;
+    postContent.value = DEFAULT_POST_CONTENT;
     attachedPreviews.value = null;
   };
 
   function usePostContent() {
-    const postContent = ref<IPost>({
+    const DEFAULT_POST_CONTENT = {
       text: "",
-      img: null,
-      video: null,
-      event: null,
-    });
+      img: undefined,
+      video: undefined,
+      event: undefined,
+    };
+
+    const postContent = ref<IPost>(DEFAULT_POST_CONTENT);
 
     const handleInput = (e: InputEvent) => {
       const target = e.target as HTMLDivElement;
@@ -76,6 +109,7 @@
     };
 
     return {
+      DEFAULT_POST_CONTENT,
       eventDate,
       postContent,
       handleInput,
@@ -86,20 +120,50 @@
   function useAttachFiles() {
     const isModalOpen = ref(false);
     const modalType = ref<"image" | "video">("image");
-    const attachedPreviews = ref<IAttachedFile[]>([]);
-    const attachedFiles = ref<File[]>([]);
+    const attachedPreviews = ref<IAttachedFile[] | null>([]);
 
     const handleFileAttachModalOpen = (fileType: "image" | "video") => {
       isModalOpen.value = true;
       modalType.value = fileType;
     };
 
-    const handleFileAttach = (files: File[]) => {
-      attachedPreviews.value = [
-        ...attachedPreviews.value,
-        ...createMediaFilePreview(files, modalType.value),
-      ];
-      attachedFiles.value = [...attachedFiles.value, ...files];
+    const uploadAttachedFiles = async (files: File[], type: "image" | "video") => {
+      if (type === "image") {
+        const res = await filesService.UploadMultipleImages({ images: files, temp: true });
+        return res.images;
+      } else {
+        const res = await filesService.uploadMultipleVideos({ videos: files, temp: true });
+        return res.videos;
+      }
+    };
+
+    function isVideoPreviews(previews: Videos | Images): previews is Videos {
+      return Object.keys(previews[0]).includes("thumbnail");
+    }
+
+    const handleFileAttach = async (files: File[]) => {
+      const previews = await uploadAttachedFiles(files, modalType.value);
+      if (isVideoPreviews(previews)) {
+        const thumbnails: IAttachedFile[] = previews.map(item => ({
+          type: "video",
+          file: {
+            src: item.video,
+            thumbnail: item.thumbnail,
+          },
+        }));
+        attachedPreviews.value = [
+          ...(attachedPreviews.value ? attachedPreviews.value : []),
+          ...thumbnails,
+        ];
+      } else {
+        const thumbs: IAttachedFile[] = previews.map(item => ({
+          type: "image",
+          file: {
+            src: item,
+          },
+        }));
+        attachedPreviews.value = [...attachedPreviews.value, ...thumbs];
+      }
       isModalOpen.value = false;
     };
 
@@ -109,7 +173,6 @@
       attachedPreviews,
       handleFileAttachModalOpen,
       handleFileAttach,
-      attachedFiles,
     };
   }
 </script>
@@ -126,7 +189,7 @@
           {{ postContent.text }}
         </div>
       </div>
-      <PostMediaContent v-model:attached-files="attachedFiles" />
+      <PostMediaContent v-if="attachedPreviews" v-model:attached-files="attachedPreviews" />
       <div v-if="eventDate">
         <v-divider class="border-opacity-100 my-[8px]" :thickness="1" />
         <v-chip
@@ -149,10 +212,14 @@
         <FileAttachInput :files-type="modalType" @attach-file="handleFileAttach" />
       </v-card>
     </v-dialog>
+    <v-snackbar />
   </div>
 </template>
 
 <style scoped>
+  .create-post-widget {
+    @apply mb-[20px];
+  }
   .post-field {
     @apply outline-none mt-[6px] whitespace-pre-wrap;
     word-break: break-word;

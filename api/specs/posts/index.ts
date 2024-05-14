@@ -2,13 +2,19 @@ export interface IPost {
   id: number;
   text: string;
   images: string[];
-  videos: string[];
+  videos: Array<{
+    video: string;
+    thumbnail: string;
+  }>;
   profileId: number;
 }
 
 export interface CreatePostRequest {
-  img: File[];
-  video: File[];
+  img?: string[];
+  video?: {
+    video: string;
+    thumbnail: string;
+  }[];
   text: string;
   event?: Date | string;
 }

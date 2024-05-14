@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  const { isAuth } = useAuthStore();
+  const { isAuth, profileSlug } = useAuthStore();
   if (isAuth) {
-    await navigateTo("/home");
+    await navigateTo(`/${profileSlug}`);
   }
 </script>
 
