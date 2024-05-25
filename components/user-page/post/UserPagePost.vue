@@ -22,7 +22,7 @@
         <div class="post-author">
           <v-avatar size="45" rounded="lg" :image="user.avatar" />
           <div class="post-author-name">
-            <div class="author-name">{{ user.fullName }}</div>
+            <NuxtLink :to="`/${user.slug}`" class="author-name">{{ user.fullName }}</NuxtLink>
             <div class="author-position">{{ user.profession }}</div>
           </div>
           <v-menu v-if="isMyPost" offset="10" location="bottom">

@@ -2,6 +2,8 @@
   const { isAuth, profileSlug } = useAuthStore();
   if (isAuth) {
     await navigateTo(`/${profileSlug}`);
+  } else {
+    await navigateTo("/auth");
   }
 </script>
 

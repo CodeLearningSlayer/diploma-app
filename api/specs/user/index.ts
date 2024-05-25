@@ -6,12 +6,14 @@ export interface IUser {
     srcset: string;
   };
   name: string;
+  userId: number;
   profession: string;
   profile_completness: number;
   contacts?: {
     email?: string;
     phone?: string;
   };
+  isPrimaryInformationFilled: boolean;
 }
 
 export interface GetUserBySlugRequest {
@@ -22,7 +24,9 @@ export interface GetUserBySlugResponse {
   user: IUser;
 }
 
-export interface GetMyProfileResponse extends GetUserBySlugResponse {}
+export interface GetMyProfileResponse {
+  profile: IUser;
+}
 
 interface IPost {
   text: string;

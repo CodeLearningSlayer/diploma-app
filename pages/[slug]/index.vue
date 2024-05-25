@@ -4,6 +4,8 @@
   import UserPageFollowedCard from "~/components/user-page/UserPageFollowedCard.vue";
   import UserPageCreatePostWidget from "~/components/user-page/UserPageCreatePostWidget.vue";
   import UserPagePost from "~/components/user-page/post/UserPagePost.vue";
+  import RightSidebarGroups from "~/components/user-page/right-sidebar/RightSidebarGroups.vue";
+  import RightSidebarPeoples from "~/components/user-page/right-sidebar/RightSidebarPeoples.vue";
   import { useApiStore } from "~/stores/api";
 
   const {
@@ -12,7 +14,7 @@
 
   console.log(slug);
 
-  const { profileService } = useApiStore();
+  const { profileService, postsService } = useApiStore();
   const { isAuth, isMyProfile } = useAuthStore();
   const { myAccount } = storeToRefs(useUserStore());
   const completness = ref();
@@ -50,7 +52,8 @@
     posts.value = [post, ...posts.value];
   };
 
-  const handleDeletePost = (postId: number) => {
+  const handleDeletePost = async (postId: number) => {
+    const res = await postsService.DeletePost({ id: postId });
     posts.value = posts.value.filter(item => item.id !== postId);
   };
 </script>
@@ -78,8 +81,10 @@
       />
     </div>
     <template #sidebar-right>
-      <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card>
-      <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card>
+      <RightSidebarPeoples />
+      <RightSidebarGroups />
+      <!-- <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card>
+      <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card> -->
     </template>
   </NuxtLayout>
 </template>

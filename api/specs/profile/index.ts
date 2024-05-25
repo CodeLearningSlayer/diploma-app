@@ -23,3 +23,7 @@ export interface IProfile {
 export interface StartResponse {
   profile: IProfile;
 }
+
+export interface GetRecommendedFriendsResponse {
+  peoples: Array<IProfile>;
+}

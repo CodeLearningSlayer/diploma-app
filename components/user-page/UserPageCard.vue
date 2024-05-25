@@ -2,11 +2,15 @@
   import { mdiEmailOutline, mdiPhone, mdiPlusBoxOutline, mdiAccountCircleOutline } from "@mdi/js";
   import { type IUser } from "~/api/specs/user";
 
-  const { isMyProfile } = useAuthStore();
+  const { isMyProfile: myProfileCheck } = useAuthStore();
 
-  defineProps<{
+  const props = defineProps<{
     user: IUser;
   }>();
+
+  const isMyProfile = computed(() => {
+    return myProfileCheck(+props.user.id);
+  });
 </script>
 
 <template>
@@ -52,7 +56,7 @@
         <div class="text-size-14 text-[--color-grey]">{{ user.profession }}</div>
       </div>
       <div
-        v-if="isMyProfile(+user.id)"
+        v-if="isMyProfile"
         class="user-card-main-block__completeness flex align-center ml-auto gap-[8px]"
       >
         <div class="w-[70px] h-[7px] bg-[#f6f6f6] rounded-[3px]">
@@ -66,8 +70,11 @@
     </div>
     <v-divider class="border-opacity-100" :thickness="2" />
     <div class="user-card-add-block py-[8px] px-[20px] cursor-pointer flex gap-[12px] items-center">
-      <v-icon :icon="mdiPlusBoxOutline" :size="24" class="text-[--color-grey]" />
-      <div class="text-[--color-grey] font-[600]">Add another account</div>
+      <template v-if="isMyProfile">
+        <v-icon :icon="mdiPlusBoxOutline" :size="24" class="text-[--color-grey]" />
+        <div class="text-[--color-grey] font-[600]">Add another account</div>
+      </template>
+      <v-btn v-else variant="text" block color="primary">Add contact</v-btn>
     </div>
   </article>
 </template>

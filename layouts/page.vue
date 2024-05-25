@@ -24,9 +24,10 @@
   }
 
   .page-layout-grid {
-    @apply grid grid-cols-[333px,minmax(200px,561px),290px] gap-[18px] mt-[38px];
+    @apply grid grid-cols-[333px,minmax(200px,1fr),333px] gap-[18px] mt-[38px];
   }
 
   .sidebar-right {
+    @apply flex flex-col gap-[24px];
   }
 </style>

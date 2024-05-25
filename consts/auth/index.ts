@@ -30,3 +30,5 @@ export const professionList = [
   "electrician",
   "engineer",
 ];
+
+export const unprotectedRoutes = ["/auth", "/auth/start", "/auth/registration"];

@@ -22,3 +22,9 @@ export interface CreatePostRequest {
 export interface CreatePostResponse {
   post: IPost;
 }
+
+export interface DeletePostRequest {
+  id: number;
+}
+
+export interface DeletePostResponse {}

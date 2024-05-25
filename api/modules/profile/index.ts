@@ -4,7 +4,11 @@ import type {
   GetUserBySlugRequest,
   GetUserBySlugResponse,
 } from "~/api/specs/user";
-import type { StartRequest, StartResponse } from "~/api/specs/profile";
+import type {
+  GetRecommendedFriendsResponse,
+  StartRequest,
+  StartResponse,
+} from "~/api/specs/profile";
 
 const prefix = "/profile";
 
@@ -21,6 +25,16 @@ export class ProfileService extends HttpFactory {
 
   public async GetMyProfile(): Promise<GetMyProfileResponse> {
     const res = await this.get<GetMyProfileResponse>(`${prefix}/me`);
+    return res;
+  }
+
+  public async GetRecommendedFriends(): Promise<GetRecommendedFriendsResponse> {
+    const res = await this.get<GetRecommendedFriendsResponse>(`${prefix}/recommended-friends`, {
+      query: {
+        limit: 5,
+        offset: 0,
+      },
+    });
     return res;
   }
 }

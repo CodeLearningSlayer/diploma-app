@@ -25,13 +25,15 @@
 
   const { profileSlug } = storeToRefs(useAuthStore());
 
-  const navLinks: Array<{
-    icon: {
-      active: string;
-      default: string;
-    };
-    link: string;
-  }> = [
+  const navLinks: ComputedRef<
+    Array<{
+      icon: {
+        active: string;
+        default: string;
+      };
+      link: string;
+    }>
+  > = computed(() => [
     {
       icon: {
         active: mdiHomeVariant,
@@ -74,7 +76,7 @@
       },
       link: "/messages",
     },
-  ];
+  ]);
 </script>
 
 <template>
