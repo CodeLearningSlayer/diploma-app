@@ -7,12 +7,11 @@
   import RightSidebarGroups from "~/components/user-page/right-sidebar/RightSidebarGroups.vue";
   import RightSidebarPeoples from "~/components/user-page/right-sidebar/RightSidebarPeoples.vue";
   import { useApiStore } from "~/stores/api";
+  import EmptyPosts from "~/components/common/EmptyPosts.vue";
 
-  const {
-    params: { slug },
-  } = useRoute();
+  const route = useRoute();
 
-  console.log(slug);
+  console.log(route.path);
 
   const { profileService, postsService } = useApiStore();
   const { isAuth, isMyProfile } = useAuthStore();
@@ -20,7 +19,9 @@
   const completness = ref();
   const posts = ref();
 
-  const { data } = await useAsyncData(() => profileService.GetUserBySlug({ slug }));
+  const { data } = await useAsyncData(() =>
+    profileService.GetUserBySlug({ slug: route?.params?.slug }),
+  );
 
   const isMyCurrentProfile = computed(() => {
     console.log(data.value?.user.userId);
@@ -71,14 +72,17 @@
       @create-post="handleCreatePost"
     />
     <div class="posts-wrapper">
-      <UserPagePost
-        v-for="post in posts"
-        :key="post.id"
-        :user="data.user!"
-        :post="post"
-        :is-my-post="isMyCurrentProfile"
-        @delete-post="handleDeletePost"
-      />
+      <template v-if="posts.length > 0">
+        <UserPagePost
+          v-for="post in posts"
+          :key="post.id"
+          :user="data.user!"
+          :post="post"
+          :is-my-post="isMyCurrentProfile"
+          @delete-post="handleDeletePost"
+        />
+      </template>
+      <EmptyPosts v-else :is-my-profile="isMyCurrentProfile" />
     </div>
     <template #sidebar-right>
       <RightSidebarPeoples />

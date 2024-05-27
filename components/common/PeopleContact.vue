@@ -13,10 +13,15 @@
 
   const emit = defineEmits<{
     (e: "add-friend", profileId: number): void;
+    (e: "cancel-friend", profileId: number): void;
   }>();
 
   const handleAddFriend = (id: number) => {
     emit("add-friend", id);
+  };
+
+  const handleCancelRequest = (id: number) => {
+    emit("cancel-friend", id);
   };
 </script>
 
@@ -29,7 +34,11 @@
       <NuxtLink :to="`/${contact.slug}`" class="name">{{ contact.fullName }}</NuxtLink>
       <div class="profession">{{ contact.profession }}</div>
     </div>
-    <ConnectBtn :status="status" />
+    <ConnectBtn
+      :status="status"
+      @request="() => handleAddFriend(contact.id)"
+      @cancel="() => handleCancelRequest(contact.id)"
+    />
   </div>
 </template>
 

@@ -39,7 +39,7 @@
         active: mdiHomeVariant,
         default: mdiHomeVariantOutline,
       },
-      link: `${profileSlug.value}`,
+      link: `/${profileSlug.value}`,
     },
     {
       icon: {

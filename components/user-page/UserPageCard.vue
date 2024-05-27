@@ -14,7 +14,6 @@
 </script>
 
 <template>
-  {{ console.log(user) }}
   <article v-if="user" class="max-w-[340px] bg-white rounded-[18px]">
     <div
       class="user-card-top-block flex justify-end bg-slate-400 rounded-t-[18px] px-[10px] py-[10px]"

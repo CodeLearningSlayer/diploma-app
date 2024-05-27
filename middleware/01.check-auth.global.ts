@@ -2,7 +2,8 @@ export default defineNuxtRouteMiddleware(async () => {
   const { isAuth, userId, profileSlug, profile } = storeToRefs(useAuthStore());
   const { accessToken } = storeToRefs(useCookieStore());
 
-  console.log(isAuth, userId.value);
+  console.log("CLIENT side");
+
   if (isAuth.value && accessToken.value) {
     console.log("ALREADY LOGGED IN");
     return;
@@ -11,6 +12,8 @@ export default defineNuxtRouteMiddleware(async () => {
   if (accessToken.value) {
     const { profileService } = useApiStore();
     const { data, error } = await useAsyncData(() => profileService.GetMyProfile());
+
+    console.log(data.value);
 
     if (!error.value && data.value?.profile) {
       isAuth.value = true;
