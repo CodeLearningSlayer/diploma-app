@@ -26,3 +26,15 @@ export interface SearchFriendRequest {
 export interface SearchFriendResponse extends Array<IProfile> {}
 
 export interface CancelDeleteRequest extends AddFriendRequest {}
+
+export interface GetFriendsRequestsBody {
+  profileId: number;
+}
+
+export interface GetFriendsRequestsResponse extends Array<IProfile> {}
+
+export interface AcceptFriendRequest extends AddFriendRequest {}
+
+export interface GetSentRequestsRequest extends GetFriendsRequestsBody {}
+
+export interface GetSentRequestsResponse extends GetFriendsRequestsResponse {}

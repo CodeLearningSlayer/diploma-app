@@ -1,11 +1,16 @@
 import HttpFactory from "..";
 import type {
+  AcceptFriendRequest,
   AddFriendRequest,
   AddFriendResponse,
   CancelDeleteRequest,
   DeleteFriendRequest,
   GetFriendsRequest,
+  GetFriendsRequestsBody,
+  GetFriendsRequestsResponse,
   GetFriendsResponse,
+  GetSentRequestsRequest,
+  GetSentRequestsResponse,
   SearchFriendRequest,
   SearchFriendResponse,
 } from "~/api/specs/friendship";
@@ -45,6 +50,30 @@ export class FriendshipService extends HttpFactory {
     const res = await this.post<void>(
       `${prefix}/${req.profileId}/cancel-delete/${req.friendProfileId}`,
     );
+    return res;
+  }
+
+  public async GetFriendsRequests(
+    req: GetFriendsRequestsBody,
+  ): Promise<GetFriendsRequestsResponse> {
+    const res = await this.get<GetFriendsRequestsResponse>(`${prefix}/${req.profileId}/requests`);
+    return res;
+  }
+
+  public async GetDeclinedRequests(
+    req: GetFriendsRequestsBody,
+  ): Promise<GetFriendsRequestsResponse> {
+    const res = await this.get<GetFriendsRequestsResponse>(`${prefix}/${req.profileId}/declined`);
+    return res;
+  }
+
+  public async AcceptFriend(req: AcceptFriendRequest): Promise<void> {
+    const res = await this.post<void>(`${prefix}/${req.profileId}/accept/${req.friendProfileId}`);
+    return res;
+  }
+
+  public async GetSentRequests(req: GetSentRequestsRequest): Promise<GetSentRequestsResponse> {
+    const res = await this.get<GetSentRequestsResponse>(`${prefix}/${req.profileId}/sent-requests`);
     return res;
   }
 }

@@ -3,15 +3,20 @@
 
   defineProps<{
     contact: IUser;
+    mode: "received-request" | "sent-request";
   }>();
 
   const emit = defineEmits<{
     "add-contact": [profileId: number];
+    "decline-contact": [profileId: number];
   }>();
 
-  const handleCancelDeletion = (id: number) => {
-    emit("cancel-delete", id);
-    isDeleteState.value = false;
+  const handleAddFriend = (id: number) => {
+    emit("add-contact", id);
+  };
+
+  const handleDeclineFriend = (id: number) => {
+    emit("decline-contact", id);
   };
 </script>
 
@@ -24,9 +29,28 @@
       <NuxtLink :to="`/${contact.slug}`" class="my-contact-name">{{ contact.fullName }}</NuxtLink>
       <div class="my-contact-profession">{{ contact.profession }}</div>
     </div>
-    <div>
-      <v-btn>Accept</v-btn>
-      <v-btn>Decline</v-btn>
+    <div v-if="mode === 'received-request'" class="actions-button">
+      <v-btn
+        class="accept-button btn--primary"
+        color="var(--color-accent-blue)"
+        @click="() => handleAddFriend(contact.id)"
+        >Accept</v-btn
+      >
+      <v-btn
+        class="decline-button btn--secondary"
+        variant="outlined"
+        color="var(--color-grey)"
+        @click="() => handleDeclineFriend(contact.id)"
+        >Decline</v-btn
+      >
+    </div>
+    <div v-else-if="mode === 'sent-request'" class="actions-button">
+      <v-btn
+        variant="outlined"
+        class="btn btn--secondary"
+        @click="() => handleDeclineFriend(contact.id)"
+        >Requested</v-btn
+      >
     </div>
   </v-card>
 </template>
@@ -76,4 +100,12 @@
       @apply text-[12px] font-[500];
     }
   }
+  .actions-button {
+    @apply flex gap-[8px];
+  }
+  /* .accept-button {
+    &:deep(.v-btn__content) {
+      @apply text-[white] font-[600];
+    }
+  } */
 </style>

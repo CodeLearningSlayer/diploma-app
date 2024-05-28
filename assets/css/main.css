@@ -100,3 +100,29 @@
 .pins-grid-child-9 {
   grid-area: l;
 }
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.btn {
+  .v-btn__content {
+    font-weight: 600;
+  }
+}
+
+.btn--primary {
+  background: var(--color-accent-blue);
+  .v-btn__content {
+    color: white;
+    font-weight: 600;
+  }
+}
+
+.btn--secondary {
+  .v-btn__content {
+    color: var(--color-grey);
+    font-weight: 600;
+  }
+}

@@ -18,6 +18,7 @@
     </v-list-item>
     <v-divider></v-divider>
     <v-list-item
+      active-class="sidebar-link--active"
       to="/network/invitations"
       link
       title="Invitations"

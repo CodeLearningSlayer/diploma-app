@@ -46,7 +46,7 @@
         active: mdiAccountGroup,
         default: mdiAccountGroupOutline,
       },
-      link: "/friends",
+      link: "/network",
     },
     {
       icon: {
