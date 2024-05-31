@@ -28,7 +28,7 @@
 <template>
   <div class="contact">
     <NuxtLink :to="`/${contact.slug}`">
-      <v-avatar :image="contact.avatar" />
+      <v-avatar class="contact-avatar" :image="contact.avatar" />
     </NuxtLink>
     <div class="contact-info">
       <NuxtLink :to="`/${contact.slug}`" class="name">{{ contact.fullName }}</NuxtLink>

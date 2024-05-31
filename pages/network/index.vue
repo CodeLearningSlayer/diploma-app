@@ -15,13 +15,6 @@
     },
   );
 
-  const mode = computed<"search" | "default">(() => {
-    if (searchValue.value?.length > 0) {
-      return "search";
-    }
-    return "default";
-  });
-
   const handleSearch = async (value: string) => {
     try {
       if (!value) return;

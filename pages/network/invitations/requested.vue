@@ -46,6 +46,10 @@
     transform: translateX(30px);
   }
 
+  .sent-requests-title {
+    @apply mb-[12px] text-[16px];
+  }
+
   .empty-invitations {
     @apply rounded-[10px] bg-white w-full h-[200px] flex justify-center items-center;
   }

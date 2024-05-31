@@ -14,13 +14,24 @@
   console.log(route.path);
 
   const { profileService, postsService } = useApiStore();
-  const { isAuth, isMyProfile } = useAuthStore();
-  const { myAccount } = storeToRefs(useUserStore());
+  const { isMyProfile } = useAuthStore();
   const completness = ref();
+
   const posts = ref();
 
   const { data } = await useAsyncData(() =>
-    profileService.GetUserBySlug({ slug: route?.params?.slug }),
+    profileService.GetUserBySlug({ slug: route?.params?.slug.toString() }),
+  );
+
+  watch(
+    data,
+    async data => {
+      if (data && data.user && !posts.value) {
+        posts.value = (await profileService.GetProfilePosts({ profileId: +data.user.id })).posts;
+        console.log(posts.value);
+      }
+    },
+    { immediate: true },
   );
 
   const isMyCurrentProfile = computed(() => {
@@ -38,15 +49,15 @@
     { immediate: true },
   );
 
-  watch(
-    [data],
-    () => {
-      if (data) {
-        posts.value = data.value?.user.posts.slice().reverse();
-      }
-    },
-    { immediate: true },
-  );
+  // watch(
+  //   [data],
+  //   () => {
+  //     if (data) {
+  //       posts.value = data.value?.user.posts.slice().reverse();
+  //     }
+  //   },
+  //   { immediate: true },
+  // );
 
   const handleCreatePost = (post: IPost) => {
     console.log(post);
@@ -72,7 +83,7 @@
       @create-post="handleCreatePost"
     />
     <div class="posts-wrapper">
-      <template v-if="posts.length > 0">
+      <template v-if="posts && posts.length > 0">
         <UserPagePost
           v-for="post in posts"
           :key="post.id"

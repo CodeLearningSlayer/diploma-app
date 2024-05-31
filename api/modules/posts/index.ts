@@ -5,6 +5,8 @@ import type {
   CreatePostResponse,
   DeletePostRequest,
   DeletePostResponse,
+  GetProfilePostsRequest,
+  GetProfilePostsResponse,
 } from "~/api/specs/posts";
 
 const prefix = "/posts";
@@ -20,6 +22,11 @@ export class PostsService extends HttpFactory {
 
   public async DeletePost(req: DeletePostRequest): Promise<DeletePostResponse> {
     const res = await this.delete<DeletePostResponse>(`${prefix}/${req.id}`);
+    return res;
+  }
+
+  public async GetProfilePosts(req: GetProfilePostsRequest): Promise<GetProfilePostsResponse> {
+    const res = await this.get<GetProfilePostsResponse>(`${prefix}/${req.profileId}/posts`);
     return res;
   }
 }

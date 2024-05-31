@@ -11,8 +11,9 @@
   <v-list rounded="lg">
     <v-list-item
       title="Connections"
+      exact
       active-class="sidebar-link--active"
-      to="/network/connections"
+      to="/network"
       :prepend-icon="mdiLinkVariant"
     >
     </v-list-item>
@@ -26,15 +27,16 @@
     ></v-list-item>
     <v-divider></v-divider>
     <v-list-item
-      title="Groups"
-      active-class="sidebar-link--active"
-      :prepend-icon="mdiAccountMultipleOutline"
-    ></v-list-item>
-    <v-divider></v-divider>
-    <v-list-item
       title="Search contacts"
       active-class="sidebar-link--active"
       :prepend-icon="mdiSearchWeb"
+      to="/network/search"
+    ></v-list-item>
+    <v-divider></v-divider>
+    <v-list-item
+      title="Groups"
+      active-class="sidebar-link--active"
+      :prepend-icon="mdiAccountMultipleOutline"
     ></v-list-item>
   </v-list>
 </template>

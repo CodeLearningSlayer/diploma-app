@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import dayjs from "dayjs";
   import { mdiDelete } from "@mdi/js";
+  import UserPagePostComment from "./UserPagePostComment.vue";
   import type { IPost } from "~/api/specs/posts";
   import type { IProfile } from "~/api/specs/profile";
 
@@ -13,6 +14,8 @@
   defineEmits<{
     (e: "delete-post", id: number): void;
   }>();
+
+  const handleLike = () => {};
 </script>
 
 <template>
@@ -48,6 +51,22 @@
       </div>
       <div class="post-text">{{ post.text }}</div>
       <UserPageContentGrid :images="post.images" :videos="post.videos" />
+      <div class="post-interactions">
+        <UserPagePostLike :is-liked="false" @like="handleLike" />
+        <UserPagePostCommentBtn />
+      </div>
+      <div class="post-comments">
+        <v-divider class="border-opacity-100 post-comments-divider" :thickness="2" />
+        <UserPagePostComment
+          v-for="comment in post.comments"
+          :key="comment.id"
+          :comment="comment"
+        />
+        <v-textarea class="textarea-comment" label="Comment post" variant="outlined" :rows="2" />
+        <v-btn color="var(--color-accent-blue)" class="send-comment-btn btn btn--primary"
+          >Send</v-btn
+        >
+      </div>
       <div class="post-date">
         Publication date: {{ dayjs(post.createdAt).format("DD.MM.YYYY") }}
       </div>
@@ -99,5 +118,14 @@
   }
   .options-btn-list {
     @apply p-0;
+  }
+  .post-comments-divider {
+    @apply mb-[12px];
+  }
+  .send-comment-btn {
+    @apply items-center ml-auto block;
+  }
+  .textarea-comment {
+    @apply mt-[12px];
   }
 </style>

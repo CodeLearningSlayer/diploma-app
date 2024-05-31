@@ -9,6 +9,7 @@ import type {
   StartRequest,
   StartResponse,
 } from "~/api/specs/profile";
+import type { GetProfilePostsRequest, GetProfilePostsResponse } from "~/api/specs/posts";
 
 const prefix = "/profile";
 
@@ -35,6 +36,25 @@ export class ProfileService extends HttpFactory {
         offset: 0,
       },
     });
+    return res;
+  }
+
+  public async SearchRecommendedFriends(
+    searchTerm: string,
+  ): Promise<GetRecommendedFriendsResponse> {
+    const res = await this.get<GetRecommendedFriendsResponse>(
+      `${prefix}/recommended-friends/search`,
+      {
+        query: {
+          searchTerm,
+        },
+      },
+    );
+    return res;
+  }
+
+  public async GetProfilePosts(req: GetProfilePostsRequest): Promise<GetProfilePostsResponse> {
+    const res = await this.get<GetProfilePostsResponse>(`${prefix}/${req.profileId}/posts`);
     return res;
   }
 }

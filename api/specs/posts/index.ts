@@ -1,13 +1,4 @@
-export interface IPost {
-  id: number;
-  text: string;
-  images: string[];
-  videos: Array<{
-    video: string;
-    thumbnail: string;
-  }>;
-  profileId: number;
-}
+import type { IUser } from "../user";
 
 export interface CreatePostRequest {
   img?: string[];
@@ -28,3 +19,29 @@ export interface DeletePostRequest {
 }
 
 export interface DeletePostResponse {}
+
+export interface GetProfilePostsRequest {
+  profileId: number;
+}
+
+export interface IComment {
+  id: number;
+  profile: IUser;
+  text: string;
+}
+
+export interface IPost {
+  id: number;
+  text: string;
+  images: string[];
+  videos: Array<{
+    video: string;
+    thumbnail: string;
+  }>;
+  comments: IComment[];
+  profileId: number;
+}
+
+export interface GetProfilePostsResponse {
+  posts: Array<IPost>;
+}
