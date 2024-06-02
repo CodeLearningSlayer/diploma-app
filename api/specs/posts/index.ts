@@ -38,6 +38,7 @@ export interface IPost {
     video: string;
     thumbnail: string;
   }>;
+  likes: Array<any>;
   comments: IComment[];
   profileId: number;
 }

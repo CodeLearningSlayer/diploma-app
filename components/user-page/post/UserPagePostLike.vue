@@ -3,6 +3,7 @@
 
   defineProps<{
     isLiked: boolean;
+    likeCount: number;
   }>();
 
   const emit = defineEmits<{
@@ -16,7 +17,7 @@
 
 <template>
   <v-btn variant="text" size="40" @click="() => handleLikeClick(!isLiked)">
-    <v-badge class="badge" offset-x="-5" offset-y="-5" content="2">
+    <v-badge class="badge" offset-x="-5" offset-y="-5" :content="likeCount">
       <v-icon size="25" location="top start" :icon="isLiked ? mdiThumbUp : mdiThumbUpOutline" />
     </v-badge>
   </v-btn>

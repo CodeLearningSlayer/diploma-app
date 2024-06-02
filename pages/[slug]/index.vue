@@ -8,16 +8,17 @@
   import RightSidebarPeoples from "~/components/user-page/right-sidebar/RightSidebarPeoples.vue";
   import { useApiStore } from "~/stores/api";
   import EmptyPosts from "~/components/common/EmptyPosts.vue";
+  import type { IPost } from "~/api/specs/posts";
 
   const route = useRoute();
 
   console.log(route.path);
 
-  const { profileService, postsService } = useApiStore();
-  const { isMyProfile } = useAuthStore();
+  const { profileService, postsService, commentsService } = useApiStore();
+  const { isMyProfile, profile } = useAuthStore();
   const completness = ref();
 
-  const posts = ref();
+  const posts = ref<IPost[]>();
 
   const { data } = await useAsyncData(() =>
     profileService.GetUserBySlug({ slug: route?.params?.slug.toString() }),
@@ -68,6 +69,20 @@
     const res = await postsService.DeletePost({ id: postId });
     posts.value = posts.value.filter(item => item.id !== postId);
   };
+
+  const handleSendComment = async (req: { postId: number; text: string }) => {
+    const res = await commentsService.SendComment({
+      postId: req.postId,
+      profileId: profile!.id,
+      text: req.text,
+    });
+    const commentedPost = posts.value?.find(post => post.id === req.postId);
+    // const newPost = commentedPost;
+    if (commentedPost) {
+      commentedPost.comments = [...commentedPost.comments, res.comment];
+      console.log(commentedPost.comments);
+    }
+  };
 </script>
 
 <template>
@@ -91,6 +106,7 @@
           :post="post"
           :is-my-post="isMyCurrentProfile"
           @delete-post="handleDeletePost"
+          @comment="handleSendComment"
         />
       </template>
       <EmptyPosts v-else :is-my-profile="isMyCurrentProfile" />

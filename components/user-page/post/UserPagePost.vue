@@ -5,17 +5,66 @@
   import type { IPost } from "~/api/specs/posts";
   import type { IProfile } from "~/api/specs/profile";
 
-  defineProps<{
+  const props = defineProps<{
     user: IProfile;
     post: IPost;
     isMyPost: boolean;
   }>();
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: "delete-post", id: number): void;
+    (e: "like", id: number): void;
+    (e: "comment", value: { text: string; postId: number }): void;
   }>();
 
-  const handleLike = () => {};
+  const { likesService, commentsService } = useApiStore();
+  const { profile } = useAuthStore();
+
+  const commentText = ref();
+  const comments = ref(JSON.parse(JSON.stringify(props.post.comments)));
+
+  const isPostLiked = ref<boolean | null>(null);
+
+  watch(
+    () => props.post,
+    () => {
+      if (props.post && isPostLiked.value === null) {
+        isPostLiked.value =
+          (props.post.likes.find(item => item.profileId === profile.id) ?? -1) !== -1;
+      }
+    },
+    { immediate: true },
+  );
+
+  const likesCount = ref(structuredClone(props.post.likes.length));
+
+  const handleLikePost = async (postId: number) => {
+    try {
+      if (isPostLiked.value) {
+        await likesService.DeleteLike({ postId, profileId: profile.id });
+        isPostLiked.value = false;
+        likesCount.value -= 1;
+      } else {
+        await likesService.LikePost({ postId, profileId: profile.id });
+        isPostLiked.value = true;
+        likesCount.value += 1;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleSendComment = async (postId: number) => {
+    const res = await commentsService.SendComment({
+      postId,
+      profileId: profile!.id,
+      text: commentText.value,
+    });
+    console.log(res.comment);
+    // const newPost = commentedPost;
+    comments.value = [...comments.value, res.comment];
+    console.log(comments.value);
+  };
 </script>
 
 <template>
@@ -29,7 +78,7 @@
             <div class="author-position">{{ user.profession }}</div>
           </div>
           <v-menu v-if="isMyPost" offset="10" location="bottom">
-            <template v-slot:activator="{ props }">
+            <template #activator="{ props }">
               <v-btn class="options-btn" variant="text" v-bind="props">
                 <span></span>
                 <span></span>
@@ -52,18 +101,32 @@
       <div class="post-text">{{ post.text }}</div>
       <UserPageContentGrid :images="post.images" :videos="post.videos" />
       <div class="post-interactions">
-        <UserPagePostLike :is-liked="false" @like="handleLike" />
+        <UserPagePostLike
+          :is-liked="!!isPostLiked"
+          :like-count="likesCount"
+          @like="() => handleLikePost(post.id)"
+        />
         <UserPagePostCommentBtn />
       </div>
       <div class="post-comments">
         <v-divider class="border-opacity-100 post-comments-divider" :thickness="2" />
         <UserPagePostComment
-          v-for="comment in post.comments"
+          v-for="comment in comments"
           :key="comment.id"
           :comment="comment"
+          :is-my-comment="comment.profile.id === profile?.id"
         />
-        <v-textarea class="textarea-comment" label="Comment post" variant="outlined" :rows="2" />
-        <v-btn color="var(--color-accent-blue)" class="send-comment-btn btn btn--primary"
+        <v-textarea
+          v-model="commentText"
+          class="textarea-comment"
+          label="Comment post"
+          variant="outlined"
+          :rows="2"
+        />
+        <v-btn
+          color="var(--color-accent-blue)"
+          class="send-comment-btn btn btn--primary"
+          @click="() => handleSendComment(post.id)"
           >Send</v-btn
         >
       </div>
