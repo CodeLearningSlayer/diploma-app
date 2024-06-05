@@ -14,9 +14,7 @@ export interface GetFriendsRequest {
   profileId: number;
 }
 
-export interface GetFriendsResponse {
-  friends: IUser[];
-}
+export interface GetFriendsResponse extends Array<IUser> {}
 
 export interface SearchFriendRequest {
   profileId: string;

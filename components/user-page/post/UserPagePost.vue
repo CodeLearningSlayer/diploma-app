@@ -21,9 +21,25 @@
   const { profile } = useAuthStore();
 
   const commentText = ref();
-  const comments = ref(JSON.parse(JSON.stringify(props.post.comments)));
+  const comments = ref([]);
 
+  watch(
+    () => props.post,
+    post => {
+      comments.value = JSON.parse(JSON.stringify(post.comments));
+    },
+    { immediate: true },
+  );
+
+  const isAllCommentsLoaded = computed(() => {
+    if (props.post.commentsCount) {
+      return props.post.commentsCount <= comments.value.length;
+    }
+    return true;
+  });
   const isPostLiked = ref<boolean | null>(null);
+
+  const toast = useToast();
 
   watch(
     () => props.post,
@@ -54,16 +70,48 @@
     }
   };
 
+  const handleLoadAllComments = async () => {
+    try {
+      const res = await commentsService.LoadAllPostComments({ postId: props.post.id });
+      comments.value = [...comments.value, ...res.comments];
+      console.log(comments.value);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    try {
+      await commentsService.DeleteComment({
+        commentId,
+        postId: props.post.id,
+        profileId: profile.id,
+      });
+      comments.value = comments.value.filter(comment => comment.id !== commentId);
+    } catch (e) {}
+  };
+
   const handleSendComment = async (postId: number) => {
-    const res = await commentsService.SendComment({
-      postId,
-      profileId: profile!.id,
-      text: commentText.value,
-    });
-    console.log(res.comment);
-    // const newPost = commentedPost;
-    comments.value = [...comments.value, res.comment];
-    console.log(comments.value);
+    try {
+      if (!commentText.value || commentText.value.trim().length === 0) {
+        toast.error("Comments text must contain something!");
+        return;
+      }
+      if (!isAllCommentsLoaded) {
+        await handleLoadAllComments();
+      }
+      const res = await commentsService.SendComment({
+        postId,
+        profileId: profile!.id,
+        text: commentText.value,
+      });
+      console.log(res.comment);
+      comments.value = [...comments.value, res.comment];
+      commentText.value = "";
+      console.log(comments.value);
+    } catch (e) {
+      console.log(e);
+    }
   };
 </script>
 
@@ -115,20 +163,26 @@
           :key="comment.id"
           :comment="comment"
           :is-my-comment="comment.profile.id === profile?.id"
+          @delete-comment="handleDeleteComment"
         />
-        <v-textarea
-          v-model="commentText"
-          class="textarea-comment"
-          label="Comment post"
-          variant="outlined"
-          :rows="2"
-        />
-        <v-btn
-          color="var(--color-accent-blue)"
-          class="send-comment-btn btn btn--primary"
-          @click="() => handleSendComment(post.id)"
-          >Send</v-btn
+        <v-btn v-if="!isAllCommentsLoaded" variant="plain" @click="handleLoadAllComments"
+          >Load all comments</v-btn
         >
+        <div>
+          <v-textarea
+            v-model="commentText"
+            class="textarea-comment"
+            label="Comment post"
+            variant="outlined"
+            :rows="2"
+          />
+          <v-btn
+            color="var(--color-accent-blue)"
+            class="send-comment-btn btn btn--primary"
+            @click="() => handleSendComment(post.id)"
+            >Send</v-btn
+          >
+        </div>
       </div>
       <div class="post-date">
         Publication date: {{ dayjs(post.createdAt).format("DD.MM.YYYY") }}

@@ -89,7 +89,7 @@
   <NuxtLayout name="page">
     <template #sidebar-left>
       <UserPageCard v-if="data" :user="{ ...data?.user, profile_completness: completness }" />
-      <UserPageNav />
+      <UserPageNav :info="data.user" />
       <UserPageFollowedCard />
     </template>
     <UserPageCreatePostWidget

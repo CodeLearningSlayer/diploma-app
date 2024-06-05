@@ -14,7 +14,18 @@ export interface SendCommentResponse {
 }
 
 export interface DeleteCommentRequest {
-  profileId: string;
-  postId: string;
-  commentId: string;
+  commentId: number;
+}
+
+export interface LoadAllPostCommentsRequest {
+  postId: number;
+}
+
+export interface LoadAllPostCommentsResponse {
+  comments: {
+    id: number;
+    text: string;
+    profileId: number;
+    postId: number;
+  }[];
 }
