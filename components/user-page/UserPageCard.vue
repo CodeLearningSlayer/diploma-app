@@ -2,9 +2,15 @@
   import { mdiEmailOutline, mdiPhone, mdiPlusBoxOutline, mdiAccountCircleOutline } from "@mdi/js";
   import { type IUser } from "~/api/specs/user";
 
-  defineProps<{
+  const { isMyProfile: myProfileCheck } = useAuthStore();
+
+  const props = defineProps<{
     user: IUser;
   }>();
+
+  const isMyProfile = computed(() => {
+    return myProfileCheck(+props.user.id);
+  });
 </script>
 
 <template>
@@ -32,7 +38,7 @@
     <div class="user-card-main-block flex px-[12px] py-[5px]">
       <v-avatar
         size="44"
-        :rounded="0"
+        rounded="lg"
         class="mt-[-27px] rounded-lg mr-[7px]"
         color="grey-lighten-2"
       >
@@ -42,13 +48,16 @@
           :icon="mdiAccountCircleOutline"
           color="grey-darken-2"
         />
-        <v-avatar v-else alt="user-avatar" :src="user.avatar?.src" :srcset="user.avatar?.srcset" />
+        <v-avatar v-else rounded="lg" alt="user-avatar" :image="user.avatar" />
       </v-avatar>
       <div class="user-card-main-block__info">
-        <div class="font-[600]">{{ user.name }}</div>
+        <div class="font-[600]">{{ user?.fullName }}</div>
         <div class="text-size-14 text-[--color-grey]">{{ user.profession }}</div>
       </div>
-      <div class="user-card-main-block__completeness flex align-center ml-auto gap-[8px]">
+      <div
+        v-if="isMyProfile"
+        class="user-card-main-block__completeness flex align-center ml-auto gap-[8px]"
+      >
         <div class="w-[70px] h-[7px] bg-[#f6f6f6] rounded-[3px]">
           <span
             class="bg-[--color-accent-blue] my-[2px] mx-[3px] h-[3px] block rounded-[10px]"
@@ -60,8 +69,11 @@
     </div>
     <v-divider class="border-opacity-100" :thickness="2" />
     <div class="user-card-add-block py-[8px] px-[20px] cursor-pointer flex gap-[12px] items-center">
-      <v-icon :icon="mdiPlusBoxOutline" :size="24" class="text-[--color-grey]" />
-      <div class="text-[--color-grey] font-[600]">Add another account</div>
+      <template v-if="isMyProfile">
+        <v-icon :icon="mdiPlusBoxOutline" :size="24" class="text-[--color-grey]" />
+        <div class="text-[--color-grey] font-[600]">Add another account</div>
+      </template>
+      <v-btn v-else variant="text" block color="primary">Add contact</v-btn>
     </div>
   </article>
 </template>

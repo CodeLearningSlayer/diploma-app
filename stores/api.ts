@@ -1,6 +1,11 @@
 import { $fetch, type FetchOptions } from "ofetch";
 import { AuthService } from "~/api/modules/auth";
+import { ChatsService } from "~/api/modules/chats";
+import { CommentsService } from "~/api/modules/comments";
 import { FileService } from "~/api/modules/files";
+import { FriendshipService } from "~/api/modules/friendship";
+import { LikesService } from "~/api/modules/likes";
+import { PostsService } from "~/api/modules/posts";
 import { ProfileService } from "~/api/modules/profile";
 import UserService from "~/api/modules/user";
 
@@ -99,5 +104,10 @@ export const useApiStore = defineStore("useApiStore", () => {
     authService: new AuthService($fetcher),
     filesService: new FileService($fetcher),
     profileService: new ProfileService($fetcher),
+    postsService: new PostsService($fetcher),
+    friendshipServce: new FriendshipService($fetcher),
+    likesService: new LikesService($fetcher),
+    commentsService: new CommentsService($fetcher),
+    chatsService: new ChatsService($fetcher),
   };
 });

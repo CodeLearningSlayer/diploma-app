@@ -23,26 +23,30 @@
     isAuth: boolean;
   }>();
 
-  const navLinks: Array<{
-    icon: {
-      active: string;
-      default: string;
-    };
-    link: string;
-  }> = [
+  const { profileSlug } = storeToRefs(useAuthStore());
+
+  const navLinks: ComputedRef<
+    Array<{
+      icon: {
+        active: string;
+        default: string;
+      };
+      link: string;
+    }>
+  > = computed(() => [
     {
       icon: {
         active: mdiHomeVariant,
         default: mdiHomeVariantOutline,
       },
-      link: "/home",
+      link: `/${profileSlug.value}`,
     },
     {
       icon: {
         active: mdiAccountGroup,
         default: mdiAccountGroupOutline,
       },
-      link: "/friends",
+      link: "/network",
     },
     {
       icon: {
@@ -72,7 +76,7 @@
       },
       link: "/messages",
     },
-  ];
+  ]);
 </script>
 
 <template>

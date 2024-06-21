@@ -4,14 +4,15 @@ import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 export default defineNuxtConfig({
   devtools: { enabled: true },
   build: {
-    transpile: ["vuetify"],
+    transpile: ["vuetify", "vue-toastification"],
   },
   runtimeConfig: {
     public: {
       baseApiUrl: "",
+      baseSocketUrl: "",
     },
   },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/main.css", "vue-toastification/dist/index.css"],
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", config => {

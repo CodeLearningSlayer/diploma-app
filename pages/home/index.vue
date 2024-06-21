@@ -25,7 +25,7 @@
       <UserPageNav />
       <UserPageFollowedCard />
     </template>
-    <UserPageCreatePostWidget :user="myAccount" />
+    <UserPageCreatePostWidget :user="data.user" />
     <template #sidebar-right>hi2</template>
   </NuxtLayout>
 </template>

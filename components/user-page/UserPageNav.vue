@@ -1,47 +1,70 @@
 <script setup lang="ts">
   import {
-    mdiPlayCircleOutline,
-    mdiChartBar,
-    mdiAccountPlusOutline,
-    mdiBookmarkOutline,
+    mdiAccountFileTextOutline,
     mdiGamepadOutline,
     mdiAccountSettingsOutline,
+    mdiTextAccount,
+    mdiCake,
+    mdiSchoolOutline,
+    mdiDomain,
+    mdiHammerWrench,
+    mdiControllerClassicOutline,
   } from "@mdi/js";
+  import type { IProfile } from "~/api/specs/profile";
+
+  const props = defineProps<{
+    info: IProfile;
+  }>();
+
+  const infoKeysArray = Object.keys(props.info);
+
+  console.log(infoKeysArray);
 
   const sideBarUserLinks: Array<{
     name: string;
-    link: string;
+    value: string;
     icon: string;
+    link?: boolean;
   }> = [
     {
-      name: "Learning",
-      link: "/learning",
-      icon: mdiPlayCircleOutline,
+      name: "Bio",
+      value: props.info.bio || "Not filled",
+      icon: mdiTextAccount,
     },
     {
-      name: "Insights",
-      link: "/insights",
-      icon: mdiChartBar,
+      name: "Birthday",
+      value: props.info.birthday || "Not filled",
+      icon: mdiCake,
     },
     {
-      name: "Find colleagues",
-      link: "/colleagues",
-      icon: mdiAccountPlusOutline,
+      name: "Education",
+      value: props.info.education || "Not filled",
+      icon: mdiSchoolOutline,
     },
     {
-      name: "Bookmarks",
-      link: "/bookmarks",
-      icon: mdiBookmarkOutline,
+      name: "Profession",
+      value: props.info.profession || "Not filled",
+      icon: mdiAccountFileTextOutline,
     },
     {
-      name: "Gaming",
-      link: "/gaming",
+      name: "Contact",
+      value: props.info.contact || "Not filled",
       icon: mdiGamepadOutline,
     },
     {
-      name: "Settings",
-      link: "/settings",
-      icon: mdiAccountSettingsOutline,
+      name: "Company",
+      value: props.info.company || "Not filled",
+      icon: mdiDomain,
+    },
+    {
+      name: "Skills",
+      value: props.info.skills || "Not filled",
+      icon: mdiHammerWrench,
+    },
+    {
+      name: "Interests",
+      value: props.info.interests || "Not filled",
+      icon: mdiControllerClassicOutline,
     },
   ];
 </script>
@@ -52,10 +75,9 @@
       <v-list-item
         v-for="link in sideBarUserLinks"
         :key="link.name"
-        :to="link.link"
         :prepend-icon="link.icon"
         class="p-0"
-        >{{ link.name }}</v-list-item
+        >{{ link.name }}: <span class="bio-value">{{ link.value }}</span></v-list-item
       >
     </v-list>
   </nav>
@@ -64,5 +86,8 @@
 <style scoped>
   .nav-links-list {
     @apply px-[4px] py-[24px] rounded-[18px];
+  }
+  .bio-value {
+    @apply font-[500];
   }
 </style>

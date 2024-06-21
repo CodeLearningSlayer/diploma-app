@@ -42,9 +42,9 @@
         avatar: avatar.value!,
       };
 
-      await profileService.Start(data);
+      const profile = await profileService.Start(data);
 
-      await navigateTo("/home");
+      await navigateTo(`/${profile.profile.slug}`);
     } catch (e) {
       console.log(e);
     }
@@ -54,7 +54,7 @@
 <template>
   <v-card class="auth-start-wrapper" elevation="0" rounded="xl">
     <div class="font-[600] text-center text-[20px] mb-[16px]">Let's get acquainted</div>
-    <form class="auth-start-form" @submit.prevent="submit">
+    <form class="auth-start-form" @submit.prevent="handleSubmitForm">
       <div class="auth-form__inner">
         <PictureInput @submit-photo="handleSubmitPhoto" />
         <div class="auth-form-fields">
@@ -82,7 +82,6 @@
           elevation="1"
           class="auth-form-btn"
           type="submit"
-          @click="handleSubmitForm"
         >
           Submit
         </v-btn>

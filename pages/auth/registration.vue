@@ -21,9 +21,9 @@
 </script>
 
 <template>
-  <div class="auth-wrapper">
+  <NuxtLayout name="auth">
     <AuthLoginForm :variant="AuthType.Registration" :callback="handleRegistration" />
-  </div>
+  </NuxtLayout>
 </template>
 
 <style></style>

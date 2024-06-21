@@ -6,7 +6,7 @@
     layout: false,
   });
 
-  const { authService } = useApiStore();
+  const { authService, profileService } = useApiStore();
   const { accessToken, refreshToken } = storeToRefs(useCookieStore());
 
   const handleLogin = async (email: string, password: string) => {
@@ -14,7 +14,9 @@
       const res = await authService.Login({ email, password });
       accessToken.value = res.accessToken;
       refreshToken.value = res.refreshToken;
-      await navigateTo("/home");
+      const myProfile = await profileService.GetMyProfile();
+      console.log(myProfile);
+      await navigateTo(`/${myProfile.profile.slug}`);
     } catch (e) {
       console.log(e);
     }
