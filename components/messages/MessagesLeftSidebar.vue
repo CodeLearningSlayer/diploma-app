@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import { mdiMagnify } from "@mdi/js";
   import MessageContact from "./MessageContact.vue";
-  import type { IProfile } from "~/api/specs/profile";
 
-  defineProps<{
-    contacts: IProfile[];
-  }>();
+  const { chatsService } = useApiStore();
+
+  const { data, error } = await useAsyncData(() => chatsService.GetMyChats(), {
+    server: false,
+  });
 </script>
 
 <template>
@@ -16,19 +17,8 @@
     </div>
     <v-divider class="border-opacity-100" :thickness="2" />
     <v-list class="messages-list">
-      <v-list-item
-        v-for="(contact, index) in contacts"
-        :key="contact.id"
-        :to="`/messages/${contact.id}`"
-      >
-        <MessageContact :contact="contact" />
-        <v-divider v-if="index < contacts.length" class="border-opacity-100" :thickness="2" />
-      </v-list-item>
-      <v-list-item>
-        <MessageContact />
-      </v-list-item>
-      <v-list-item :to="`/messages/${con}`">
-        <MessageContact />
+      <v-list-item v-for="chat in data?.chats" :key="chat.id" :to="`/messages/${chat.id}`">
+        <MessageContact :contact="chat.contact" :last-message="chat.messages[0]" />
       </v-list-item>
     </v-list>
   </v-card>

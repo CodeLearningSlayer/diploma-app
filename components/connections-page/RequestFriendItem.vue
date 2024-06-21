@@ -3,7 +3,7 @@
 
   defineProps<{
     contact: IUser;
-    mode: "received-request" | "sent-request" | "idle";
+    mode: "received-request" | "sent-request" | "idle" | "reviewed-request";
   }>();
 
   const emit = defineEmits<{
@@ -42,6 +42,14 @@
         color="var(--color-grey)"
         @click="() => handleDeclineFriend(contact.id)"
         >Decline</v-btn
+      >
+    </div>
+    <div v-else-if="mode === 'reviewed-request'" class="actions-button">
+      <v-btn
+        class="accept-button btn--primary"
+        color="var(--color-accent-blue)"
+        @click="() => handleAddFriend(contact.id)"
+        >Accept</v-btn
       >
     </div>
     <div v-else-if="mode === 'sent-request'" class="actions-button">

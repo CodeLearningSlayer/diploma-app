@@ -1,5 +1,6 @@
 import { $fetch, type FetchOptions } from "ofetch";
 import { AuthService } from "~/api/modules/auth";
+import { ChatsService } from "~/api/modules/chats";
 import { CommentsService } from "~/api/modules/comments";
 import { FileService } from "~/api/modules/files";
 import { FriendshipService } from "~/api/modules/friendship";
@@ -107,5 +108,6 @@ export const useApiStore = defineStore("useApiStore", () => {
     friendshipServce: new FriendshipService($fetcher),
     likesService: new LikesService($fetcher),
     commentsService: new CommentsService($fetcher),
+    chatsService: new ChatsService($fetcher),
   };
 });

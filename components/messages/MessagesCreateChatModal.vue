@@ -9,7 +9,7 @@
 
   const emit = defineEmits<{
     "close-modal": [];
-    "start-chat": [contact: IProfile];
+    "start-chat": [profileId: number];
   }>();
   const { friendshipServce } = useApiStore();
   const { profile } = useAuthStore();
@@ -64,12 +64,13 @@
         You haven't added any friend yet. Please add friend and start chating!
       </div>
       <v-btn
+        v-if="contacts?.length > 0"
         class="btn"
         :class="{ 'btn--primary': chosenContact }"
         :readonly="!chosenContact"
         :color="chosenContact ? 'var(--color-accent-blue)' : 'var(--color-grey)'"
         :variant="chosenContact ? 'elevated' : 'outlined'"
-        @click="$emit('start-chat', chosenContact)"
+        @click="$emit('start-chat', chosenContact.id)"
         >Start chat</v-btn
       >
     </v-card>

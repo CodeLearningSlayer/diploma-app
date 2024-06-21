@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import { mdiMagnify } from "@mdi/js";
   import { useDebounceFn } from "@vueuse/core";
-  import PeopleContact from "~/components/common/PeopleContact.vue";
   import RequestFriendItem from "~/components/connections-page/RequestFriendItem.vue";
-  import { ConnectStatuses } from "~/consts/common";
 
   const searchValue = ref("");
   const { profile } = storeToRefs(useAuthStore());

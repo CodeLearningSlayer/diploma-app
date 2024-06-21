@@ -15,10 +15,16 @@
     { server: false },
   );
 
-  const handleAddContact = async (friendProfileId: number) => {
+  const handleAddContact = async (friendProfileId: number, isDeclined = false) => {
     try {
       await friendshipServce.AcceptFriend({ profileId: profile.value?.id, friendProfileId });
-      requests.value = requests.value?.filter(item => item.id !== friendProfileId);
+      if (!isDeclined) {
+        requests.value = requests.value?.filter(item => item.id !== friendProfileId);
+      } else {
+        declinedRequests.value = declinedRequests.value?.filter(
+          item => item.id !== friendProfileId,
+        );
+      }
     } catch (e) {
       console.log(e);
     }
@@ -59,8 +65,8 @@
         v-for="contact in declinedRequests"
         :key="contact.id"
         :contact="contact"
-        mode="received-request"
-        @decline-contact="handleDeclineContact"
+        mode="reviewed-request"
+        @add-contact="id => handleAddContact(id, true)"
       />
     </div>
   </main>

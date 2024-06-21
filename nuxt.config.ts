@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseApiUrl: "",
+      baseSocketUrl: "",
     },
   },
   css: ["~/assets/css/main.css", "vue-toastification/dist/index.css"],

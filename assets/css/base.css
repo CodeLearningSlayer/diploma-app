@@ -50,8 +50,11 @@
 
   /* rounds */
   --round-radius: 18px;
-}
 
+  /* sizes */
+  --header-height: 80px;
+  --chat-top: 70px;
+}
 *,
 *::before,
 *::after {

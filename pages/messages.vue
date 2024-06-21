@@ -3,6 +3,8 @@
   import MessagesLeftSidebarCreateChatBtn from "~/components/messages/MessagesLeftSidebarCreateChatBtn.vue";
 
   const isModalOpen = ref(false);
+  const { chatsService } = useApiStore();
+  const { profile } = useAuthStore();
 
   const handleOpenModal = () => {
     isModalOpen.value = true;
@@ -12,7 +14,17 @@
     isModalOpen.value = false;
   };
 
-  const handleStartChat = () => {};
+  const handleStartChat = async (friendId: number) => {
+    const res = await chatsService.CreateChat({
+      profileId1: friendId,
+      profileId2: profile!.id,
+    });
+
+    if (res) {
+      await navigateTo(`/messages/${res.chat.id}`);
+      handleCloseModal();
+    }
+  };
 </script>
 
 <template>
@@ -25,7 +37,7 @@
     <MessagesCreateChatModal
       :is-modal-open="isModalOpen"
       @close-modal="handleCloseModal"
-      @start-chat=""
+      @start-chat="handleStartChat"
     />
   </NuxtLayout>
 </template>
