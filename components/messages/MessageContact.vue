@@ -7,10 +7,9 @@
 
 <template>
   <div class="message-contact">
-    <v-avatar
-      size="50"
-      image="https://sun9-55.userapi.com/impg/Qhtfsff5NTtistmYOHG7VjVd7bJYeu6-fdw8hA/1RBo-PacixE.jpg?size=807x807&quality=96&sign=a670e04c143df305265716037b1e957c&c_uniq_tag=mhQvThkDJw9i7qFtDolwUCsIsslYB-7_-N7NyL99Xfs&type=album"
-    />
+    <v-badge :color="contact.isOnline ? 'success' : 'transparent'" dot>
+      <v-avatar size="50" :image="contact.avatar" />
+    </v-badge>
     <div class="message-contact-body">
       <div class="name">{{ contact.fullName }}</div>
       <div class="last-message">

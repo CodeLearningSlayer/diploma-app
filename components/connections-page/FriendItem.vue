@@ -8,6 +8,7 @@
   const emit = defineEmits<{
     "delete-contact": [profileId: number];
     "cancel-delete": [profileId: number];
+    "send-message": [profileId: number];
   }>();
 
   const isDeleteState = ref(false);
@@ -20,6 +21,10 @@
   const handleCancelDeletion = (id: number) => {
     emit("cancel-delete", id);
     isDeleteState.value = false;
+  };
+
+  const handleSendMessage = (id: number) => {
+    emit("send-message", id);
   };
 </script>
 
@@ -34,12 +39,20 @@
       >
     </div>
     <NuxtLink :to="`/${contact.slug}`">
-      <v-avatar :image="contact.avatar" size="50" />
+      <v-badge :color="contact.isOnline ? 'success' : 'transparent'" dot>
+        <v-avatar :image="contact.avatar" size="50" />
+      </v-badge>
     </NuxtLink>
     <div class="my-contact-info">
       <NuxtLink :to="`/${contact.slug}`" class="my-contact-name">{{ contact.fullName }}</NuxtLink>
       <div class="my-contact-profession">{{ contact.profession }}</div>
-      <v-btn class="message-btn" variant="plain" density="compact">Send message</v-btn>
+      <v-btn
+        class="message-btn"
+        variant="plain"
+        density="compact"
+        @click="() => handleSendMessage(+contact.id)"
+        >Send message</v-btn
+      >
     </div>
     <v-menu>
       <template #activator="{ props }">

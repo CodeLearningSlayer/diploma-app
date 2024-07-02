@@ -1,10 +1,13 @@
 <script setup lang="ts">
+  import type { IMessage } from "~/api/specs/chats";
   import MessagesLeftSidebar from "~/components/messages/MessagesLeftSidebar.vue";
   import MessagesLeftSidebarCreateChatBtn from "~/components/messages/MessagesLeftSidebarCreateChatBtn.vue";
 
   const isModalOpen = ref(false);
   const { chatsService } = useApiStore();
   const { profile } = useAuthStore();
+
+  const { data, error } = await useAsyncData(() => chatsService.GetMyChats());
 
   const handleOpenModal = () => {
     isModalOpen.value = true;
@@ -25,15 +28,24 @@
       handleCloseModal();
     }
   };
+
+  const handleReceiveMessage = (msg: IMessage) => {
+    console.log(msg);
+    const chat = data.value?.chats.find(item => item.id === msg.chatId);
+    console.log(chat);
+    if (chat) {
+      chat.messages.push(msg);
+    }
+  };
 </script>
 
 <template>
   <NuxtLayout name="page">
     <template #sidebar-left>
-      <MessagesLeftSidebar />
+      <MessagesLeftSidebar :chats="data?.chats" />
       <MessagesLeftSidebarCreateChatBtn @open-contact-modal="handleOpenModal" />
     </template>
-    <NuxtPage />
+    <NuxtPage @receive-message="handleReceiveMessage" />
     <MessagesCreateChatModal
       :is-modal-open="isModalOpen"
       @close-modal="handleCloseModal"

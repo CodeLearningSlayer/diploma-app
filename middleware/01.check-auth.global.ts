@@ -2,8 +2,6 @@ export default defineNuxtRouteMiddleware(async () => {
   const { isAuth, userId, profileSlug, profile } = storeToRefs(useAuthStore());
   const { accessToken } = storeToRefs(useCookieStore());
 
-  console.log("CLIENT side");
-
   if (isAuth.value && accessToken.value) {
     console.log("ALREADY LOGGED IN");
     return;

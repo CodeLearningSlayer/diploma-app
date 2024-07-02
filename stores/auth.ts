@@ -8,7 +8,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const profile = ref<IProfile>();
 
   const isMyProfile = (id: number) => {
-    console.log(userId.value, id);
     return userId.value === id;
   };
 

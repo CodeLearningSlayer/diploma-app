@@ -18,6 +18,7 @@ export interface IProfile {
   avatar: string;
   education: string;
   skills: string;
+  isOnline: boolean;
 }
 
 export interface StartResponse {

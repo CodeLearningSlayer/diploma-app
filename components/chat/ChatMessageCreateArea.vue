@@ -6,11 +6,12 @@
   }>();
 
   const text = ref();
+  const areaRef = ref();
 
   const handleSendMessage = () => {
     if (text.value) {
       emit("send-message", text.value);
-      text.value = "";
+      areaRef.value.textContent = "";
     }
   };
 
@@ -18,11 +19,24 @@
     const target = e.target as HTMLDivElement;
     text.value = target.textContent ?? "";
   };
+
+  const handleEnterClick = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 </script>
 
 <template>
   <div class="create-message-area-wrapper">
-    <div contenteditable class="create-message-area" @input="handleInput">{{ text }}</div>
+    <div
+      ref="areaRef"
+      contenteditable
+      class="create-message-area"
+      @input="handleInput"
+      @keydown="handleEnterClick"
+    ></div>
     <v-btn
       class="btn btn--primary"
       color="var(--color-accent-blue)"

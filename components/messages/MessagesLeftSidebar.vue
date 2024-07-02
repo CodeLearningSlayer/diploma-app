@@ -1,12 +1,9 @@
 <script setup lang="ts">
   import { mdiMagnify } from "@mdi/js";
   import MessageContact from "./MessageContact.vue";
+  import type { IChat } from "~/api/specs/chats";
 
-  const { chatsService } = useApiStore();
-
-  const { data, error } = await useAsyncData(() => chatsService.GetMyChats(), {
-    server: false,
-  });
+  defineProps<{ chats: IChat[] }>();
 </script>
 
 <template>
@@ -17,8 +14,8 @@
     </div>
     <v-divider class="border-opacity-100" :thickness="2" />
     <v-list class="messages-list">
-      <v-list-item v-for="chat in data?.chats" :key="chat.id" :to="`/messages/${chat.id}`">
-        <MessageContact :contact="chat.contact" :last-message="chat.messages[0]" />
+      <v-list-item v-for="chat in chats" :key="chat.id" :to="`/messages/${chat.id}`">
+        <MessageContact :contact="chat.contact" :last-message="chat.messages.at(-1) ?? ''" />
       </v-list-item>
     </v-list>
   </v-card>

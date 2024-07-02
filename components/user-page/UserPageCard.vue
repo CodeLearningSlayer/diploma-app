@@ -36,20 +36,22 @@
       </div>
     </div>
     <div class="user-card-main-block flex px-[12px] py-[5px]">
-      <v-avatar
-        size="44"
-        rounded="lg"
-        class="mt-[-27px] rounded-lg mr-[7px]"
-        color="grey-lighten-2"
+      <v-badge
+        location="bottom end"
+        class="user-card-badge mt-[-27px] rounded-lg mr-[7px]"
+        :color="user.isOnline ? 'success' : 'transparent'"
+        dot
       >
-        <v-icon
-          v-if="!user.avatar"
-          size="35"
-          :icon="mdiAccountCircleOutline"
-          color="grey-darken-2"
-        />
-        <v-avatar v-else rounded="lg" alt="user-avatar" :image="user.avatar" />
-      </v-avatar>
+        <v-avatar size="44" rounded="lg" class="rounded-lg mr-[7px]" color="grey-lighten-2">
+          <v-icon
+            v-if="!user.avatar"
+            size="35"
+            :icon="mdiAccountCircleOutline"
+            color="grey-darken-2"
+          />
+          <v-avatar v-else rounded="lg" alt="user-avatar" :image="user.avatar" />
+        </v-avatar>
+      </v-badge>
       <div class="user-card-main-block__info">
         <div class="font-[600]">{{ user?.fullName }}</div>
         <div class="text-size-14 text-[--color-grey]">{{ user.profession }}</div>
@@ -92,6 +94,11 @@
     }
     &:deep(.v-list-item__prepend) {
       display: block;
+    }
+  }
+  .user-card-badge {
+    &:deep(.v-badge__badge) {
+      left: calc(100% - 12px) !important;
     }
   }
 </style>

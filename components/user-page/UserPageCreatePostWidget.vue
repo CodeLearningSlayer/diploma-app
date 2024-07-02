@@ -37,8 +37,14 @@
   // eslint-disable-next-line import/no-named-as-default-member
   dayjs.extend(LocalizedFormat);
 
-  const { postContent, eventDate, handleInput, handleRemoveEvent, DEFAULT_POST_CONTENT } =
-    usePostContent();
+  const {
+    postContent,
+    eventDate,
+    postFieldRef,
+    handleInput,
+    handleRemoveEvent,
+    DEFAULT_POST_CONTENT,
+  } = usePostContent();
   const { attachedPreviews, isModalOpen, modalType, handleFileAttach, handleFileAttachModalOpen } =
     useAttachFiles();
 
@@ -85,6 +91,7 @@
   const resetPostContent = () => {
     postContent.value = DEFAULT_POST_CONTENT;
     attachedPreviews.value = null;
+    postFieldRef.value.textContent = "";
   };
 
   function usePostContent() {
@@ -96,6 +103,7 @@
     };
 
     const postContent = ref<IPost>(DEFAULT_POST_CONTENT);
+    const postFieldRef = ref();
 
     const handleInput = (e: InputEvent) => {
       const target = e.target as HTMLDivElement;
@@ -111,6 +119,7 @@
     return {
       DEFAULT_POST_CONTENT,
       eventDate,
+      postFieldRef,
       postContent,
       handleInput,
       handleRemoveEvent,
@@ -185,9 +194,12 @@
         <v-avatar v-else size="35" rounded="lg" color="grey-lighten-2">
           <v-icon :icon="mdiAccountCircleOutline" color="grey-darken-2" />
         </v-avatar>
-        <div class="post-field min-h-[70px] w-full" contenteditable @input="handleInput">
-          {{ postContent.text }}
-        </div>
+        <div
+          ref="postFieldRef"
+          class="post-field min-h-[70px] w-full"
+          contenteditable
+          @input="handleInput"
+        ></div>
       </div>
       <PostMediaContent v-if="attachedPreviews" v-model:attached-files="attachedPreviews" />
       <div v-if="eventDate">

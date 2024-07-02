@@ -74,7 +74,7 @@
         active: mdiAccount,
         default: mdiAccountOutline,
       },
-      link: "/messages",
+      link: "/settings",
     },
   ]);
 </script>

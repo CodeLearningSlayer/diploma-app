@@ -7,10 +7,16 @@
     author: IProfile;
     isMine: boolean;
   }>();
+
+  const messageWrapperRef = ref();
+
+  defineExpose({
+    messageWrapperRef: messageWrapperRef.value,
+  });
 </script>
 
 <template>
-  <div class="message-wrapper" :class="{ mine: isMine }">
+  <div ref="messageWrapperRef" class="message-wrapper" :class="{ mine: isMine }">
     <div class="message-inner">
       <div class="message-block" :class="{ mine: isMine }">{{ message.text }}</div>
       <v-avatar v-if="!isMine" :image="author?.avatar" />

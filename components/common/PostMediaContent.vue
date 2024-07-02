@@ -5,7 +5,7 @@
   import ContentModalVideo from "~/components/user-page/content-modal/ContentModalVideo.vue";
 
   const props = defineProps<{
-    attachedFiles: IAttachedFile[];
+    attachedFiles: IAttachedFile[] | undefined;
   }>();
 
   const emit = defineEmits<{
@@ -36,14 +36,14 @@
     });
 
     const attachedImages = computed(() => {
-      return attachedFiles.value.filter(item => item.type === "image");
+      return attachedFiles.value?.filter(item => item.type === "image");
     });
 
     const currentImage = ref<IAttachedFile>();
     const currentVideo = ref<IAttachedFile>();
 
     const handlePinDelete = (item: IAttachedFile) => {
-      attachedFiles.value = attachedFiles.value.filter(file => file !== item);
+      attachedFiles.value = attachedFiles.value?.filter(file => file !== item);
     };
 
     const handleClickPin = (item: IAttachedFile) => {

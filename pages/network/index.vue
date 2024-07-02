@@ -3,7 +3,7 @@
   import { useDebounceFn } from "@vueuse/core";
   import FriendItem from "~/components/connections-page/FriendItem.vue";
 
-  const { friendshipServce } = useApiStore();
+  const { friendshipServce, chatsService } = useApiStore();
   const { profile } = storeToRefs(useAuthStore());
 
   const searchValue = ref("");
@@ -52,6 +52,18 @@
       console.log(e);
     }
   };
+
+  const handleSendMessage = async (profileId: number) => {
+    try {
+      const chat = await chatsService.CreateChat({
+        profileId1: profile.value?.id,
+        profileId2: profileId,
+      });
+      await navigateTo(`/messages/${chat.chat.id}`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 </script>
 
 <template>
@@ -76,6 +88,7 @@
         :contact="friend"
         @delete-contact="handleDeleteContact"
         @cancel-delete="handleCancelDelete"
+        @send-message="handleSendMessage"
       />
     </div>
   </section>

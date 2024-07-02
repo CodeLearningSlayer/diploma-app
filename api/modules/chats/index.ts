@@ -3,6 +3,8 @@ import type {
   CreateChatRequest,
   CreateChatResponse,
   GetChatByIdResponse,
+  GetChatMessagesRequest,
+  GetChatMessagesResponse,
   GetMyChatsResponse,
 } from "~/api/specs/chats";
 
@@ -21,6 +23,15 @@ export class ChatsService extends HttpFactory {
 
   public async GetChatById(id: number): Promise<GetChatByIdResponse> {
     const res = await this.get<GetChatByIdResponse>(`${prefix}/${id}`);
+    return res;
+  }
+
+  public async GetChatMessages(req: GetChatMessagesRequest): Promise<GetChatMessagesResponse> {
+    const res = await this.get<GetChatMessagesResponse>(`${prefix}/${req.chatId}/messages`, {
+      query: {
+        offset: req.offset,
+      },
+    });
     return res;
   }
 }

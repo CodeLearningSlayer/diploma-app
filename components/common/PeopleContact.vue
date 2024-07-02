@@ -6,6 +6,7 @@
       name: string;
       slug: string;
       profession: string;
+      isOnline: boolean;
       avatar: string;
     };
     status: ConnectStatuses;
@@ -28,7 +29,9 @@
 <template>
   <div class="contact">
     <NuxtLink :to="`/${contact.slug}`">
-      <v-avatar class="contact-avatar" :image="contact.avatar" />
+      <v-badge :color="contact.isOnline ? 'success' : 'transparent'">
+        <v-avatar class="contact-avatar" :image="contact.avatar" />
+      </v-badge>
     </NuxtLink>
     <div class="contact-info">
       <NuxtLink :to="`/${contact.slug}`" class="name">{{ contact.fullName }}</NuxtLink>

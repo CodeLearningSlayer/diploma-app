@@ -33,11 +33,6 @@
       to="/network/search"
     ></v-list-item>
     <v-divider></v-divider>
-    <v-list-item
-      title="Groups"
-      active-class="sidebar-link--active"
-      :prepend-icon="mdiAccountMultipleOutline"
-    ></v-list-item>
   </v-list>
 </template>
 

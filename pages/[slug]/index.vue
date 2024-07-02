@@ -18,7 +18,7 @@
   const { isMyProfile, profile } = useAuthStore();
   const completness = ref();
 
-  const posts = ref<IPost[]>();
+  const posts = ref<IPost[]>([]);
 
   const { data } = await useAsyncData(() =>
     profileService.GetUserBySlug({ slug: route?.params?.slug.toString() }),
@@ -27,7 +27,7 @@
   watch(
     data,
     async data => {
-      if (data && data.user && !posts.value) {
+      if (data && data.user && posts.value.length === 0) {
         posts.value = (await profileService.GetProfilePosts({ profileId: +data.user.id })).posts;
         console.log(posts.value);
       }
@@ -49,16 +49,6 @@
     },
     { immediate: true },
   );
-
-  // watch(
-  //   [data],
-  //   () => {
-  //     if (data) {
-  //       posts.value = data.value?.user.posts.slice().reverse();
-  //     }
-  //   },
-  //   { immediate: true },
-  // );
 
   const handleCreatePost = (post: IPost) => {
     console.log(post);
@@ -102,7 +92,7 @@
         <UserPagePost
           v-for="post in posts"
           :key="post.id"
-          :user="data.user!"
+          :user="data?.user!"
           :post="post"
           :is-my-post="isMyCurrentProfile"
           @delete-post="handleDeletePost"
@@ -114,8 +104,6 @@
     <template #sidebar-right>
       <RightSidebarPeoples />
       <RightSidebarGroups />
-      <!-- <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card>
-      <v-card rounded="xl" class="wip">WORK IN PROGRESS</v-card> -->
     </template>
   </NuxtLayout>
 </template>

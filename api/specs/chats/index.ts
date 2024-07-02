@@ -33,3 +33,12 @@ export interface GetMyChatsResponse {
 export interface GetChatByIdResponse {
   chat: IChat;
 }
+
+export interface GetChatMessagesRequest {
+  chatId: number;
+  offset: number;
+}
+
+export interface GetChatMessagesResponse {
+  messages: IMessage[];
+}
